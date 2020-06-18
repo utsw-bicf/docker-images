@@ -1,0 +1,8 @@
+#action.yml
+name: 'Build BICF Base Image'
+author: 'Jon Gesell'
+description: 'Builds the image from which all our other images have been built'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
