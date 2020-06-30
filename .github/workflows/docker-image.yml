@@ -17,4 +17,4 @@ jobs:
     - name: Build the Docker image
       run: |
         cd bicfbase/1.0.0
-        docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        bash ../../scripts/dockerPatch.sh
