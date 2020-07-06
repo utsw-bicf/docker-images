@@ -17,4 +17,4 @@ jobs:
     - name: Build the Docker image
       run: |
         cd bicfbase/1.0.0
-        bash ../../scripts/dockerPatch.sh
+        bash ../../scripts/dockerPatch.sh -f Dockerfile -m "Updated image"
