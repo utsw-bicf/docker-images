@@ -1,0 +1,15 @@
+name: Docker Image Cascade
+
+on: [push]
+
+jobs:
+  runci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup pytest
+      run:  pip3 install -U pytest-pythonpath==0.7.1 pytest-cov==2.5.1
+
+    - name: Check Docker Images
+      run: python3 -m pytest tests/test_dockerfiles.py::dockerfiles
