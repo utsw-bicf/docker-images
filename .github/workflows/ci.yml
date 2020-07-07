@@ -14,4 +14,4 @@ jobs:
         pip3 install -U pytest-pythonpath==0.7.1 pytest-cov==2.5.1
 
     - name: Check Docker Images
-      run: python3 -m pytest tests/test_dockerfiles.py
+      run: pytest -m dockerfiles
