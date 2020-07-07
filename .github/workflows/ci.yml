@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Setup pytest
       run: |
-        apt-get install python3-setuptools
+        sudo apt-get install python3-setuptools
         pip3 install -U pytest-pythonpath==0.7.1 pytest-cov==2.5.1
 
     - name: Check Docker Images
