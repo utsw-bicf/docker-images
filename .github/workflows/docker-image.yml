@@ -18,4 +18,4 @@ jobs:
       run: |
         dockerfile=`find */*/*ocker*ile -maxdepth 0 -type f -printf "%T@ %Tc %p\n" | sort -n | rev | cut -f1 -d ' ' | cut -f1,2,3 -d '/' | rev | tail -n1`;
         dockerfile=`readlink -e ${dockerfile}`;
-        bash scripts/update.sh -f "${dockerfile}" -m "Updated image";
+        bash scripts/updater.sh -f "${dockerfile}" -m "Updated image";
