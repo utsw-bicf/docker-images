@@ -14,4 +14,6 @@ jobs:
         pip3 install -U pytest-pythonpath==0.7.1 pytest-cov==2.5.1
 
     - name: Check Docker Images
-      run: python3 tests/imagecheck.py bicf bicfbase/1.0.0/unittest.yml
+      run: |
+        docker build -t bicf/bicfbase:1.0.0 -f bicfbase/1.0.0/Dockerfile --rm --no-cache .
+        python3 tests/imagecheck.py bicf bicfbase/1.0.0/unittest.yml
