@@ -16,4 +16,5 @@ jobs:
     - name: Check Docker Images
       run: |
         docker build -t bicf/bicfbase:1.0.0 -f bicfbase/1.0.0/Dockerfile --rm --no-cache .
+        docker image ls
         python3 tests/imagecheck.py bicf bicfbase/1.0.0/unittest.yml
