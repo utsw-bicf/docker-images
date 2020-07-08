@@ -15,4 +15,4 @@ jobs:
         dockerImage="bicf/`echo ${dockerFile} | cut -f1,2 -d '/' | tr -s '/' ':'`";
         docker build -t ${dockerImage} -f ${dockerFile} --rm --no-cache .
         docker image ls
-        python3 tests/imagecheck.py "--entrypoint '' bicf" ${testFile}
+        python3 tests/imagecheck.py "bicf" ${testFile}
