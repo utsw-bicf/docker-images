@@ -1,5 +1,3 @@
 commands:
-  - cmd: "echo $BASH_VERSION"
-    expect_text: "4.4.20(1)-release"
   - cmd: "parallel --version | head -n1"
     expect_text: "GNU parallel 20161222"
