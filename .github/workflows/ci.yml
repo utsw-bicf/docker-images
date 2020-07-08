@@ -9,6 +9,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Check Latest Docker Image
-      run: |
-        ls
-        bash scripts/dockerBuild.sh
+      run: bash scripts/dockerBuild.sh
