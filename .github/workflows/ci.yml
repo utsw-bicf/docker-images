@@ -8,4 +8,6 @@ jobs:
 
     steps:
     - name: Check Latest Docker Image
-      run: bash scripts/dockerBuild.sh
+      run: |
+        ls
+        bash scripts/dockerBuild.sh
