@@ -26,14 +26,14 @@ def build_entry(docker_image, dockerfile_path):
   new_image = {
     docker_image: {
       'parents': parent,
-      'children': None
+      'children': "none"
     }
   }
-  with open (RELATION_FILENAME) as f:
-    data = yaml.safe_load(f)
-    data['images'].update(new_image)
-    yaml.safe_dump(data, f)
-    
+  f = open (RELATION_FILENAME)
+  g = open ("temp.yaml", "w")
+  data = yaml.safe_load(f)
+  data['images'].update(new_image)
+  yaml.safe_dump(data, g)
 
 #Checks to see if there are any existing images with the name provided.  If there are, then it will verify the information.  If not, then it passes the information to build a new entry in the yaml file.
 def check_image (docker_image, dockerfile_path):
