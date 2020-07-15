@@ -1,5 +1,7 @@
 ---
 images:
   bicfbase:
-    parents: "ubuntu:18.04" 
-    children:
+    1.0.0:
+      children: none
+      parents: 
+      - ubuntu:18.04
