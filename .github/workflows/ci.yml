@@ -1,4 +1,4 @@
-name: Docker Image Cascade
+name: Standard Workflow CI
 
 on: [push]
 
