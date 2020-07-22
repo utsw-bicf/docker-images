@@ -9,7 +9,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Check Latest Docker Image
+      env:
+        DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
+        DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
+        DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
       run: |
+        export GITHUB_REF=`git rev-parse --abbrev-ref HEAD`
         dockerFile=`find */*/*ocker*ile -maxdepth 0 -printf "%T@ %Tc %p\n" | sort -n | rev | cut -f1 -d ' ' | cut -f1,2,3 -d '/' | rev | tail -n1`
         testFile="`echo ${dockerFile} | cut -f1,2 -d '/'`/unittest.yml";
         dockerImage="bicf/`echo ${dockerFile} | cut -f1,2 -d '/' | tr -s '/' ':'`";
