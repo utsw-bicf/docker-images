@@ -1,7 +1,8 @@
 #!/bin/bash
 
 function current_branch_name() {
-  echo${GITHUB_REF} 
+  export GITHUB_REF=`git rev-parse --abbrev-ref HEAD`
+  echo "${GITHUB_REF}"
 }
 
 function fetch_master()
@@ -31,7 +32,7 @@ function fetch_master()
 # Given a range, produce the list of file paths changed
 function changed_paths_in_range() {
   compare_range=$1
-  # diff-filter=d excludes deleted files
+  # dio${GITHUB_REF}f-filter=d excludes deleted files
   git diff --name-only --diff-filter=d $compare_range
 }
 
