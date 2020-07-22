@@ -1,7 +1,6 @@
 #!/bin/bash
 
 function current_branch_name() {
-  export GITHUB_REF=`git rev-parse --abbrev-ref HEAD`
   echo "${GITHUB_REF}"
 }
 
