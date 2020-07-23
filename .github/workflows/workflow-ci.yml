@@ -12,7 +12,7 @@ jobs:
       env:
         DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
         DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
-        DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
+        DOCKERHUB_ORG: bicf
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
       run: |
         set -e
