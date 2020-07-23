@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function current_branch_name() {
-  echo "${GITHUB_REF}"
+  echo "${GITHUB_REF##*/}"
 }
 
 function fetch_master()
