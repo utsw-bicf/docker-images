@@ -18,10 +18,12 @@ jobs:
         export GITHUB_REF=`git rev-parse --abbrev-ref HEAD`
         #Check to see if more than one Dockerfile has been updated, and if so, error out.
         counter=0
-        for i in `changed_paths_in_range \`get_compare_range\``; do
-          if [ `echo ${i} | grep -I 'Dockerfile' | wc -l` -gt 0 ]; then
-            counter=$((counter + 1))
-          fi
+        for j in `get_compare_range`; do
+          for i in `changed_paths_in_range ${j}`; do
+            if [ `echo ${i} | grep -I 'Dockerfile' | wc -l` -gt 0 ]; then
+              counter=$((counter + 1))
+            fi
+          done
         done
         if [ "${counter]" -gt "1" ]; then
             echo "ERROR: More than one Dockerfile commited!  Can only update one Dockerfile at a time"
