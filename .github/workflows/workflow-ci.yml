@@ -14,26 +14,12 @@ jobs:
         DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
         DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
       run: |
+        set -e
         source scripts/functions.sh
         fetch_master
         #Check to see if more than one Dockerfile has been updated, and if so, error out.
         compare_range=$(get_compare_range)
         paths=$(changed_paths_in_range "$compare_range")
         print_changed "$compare_range" "$paths"
-        counter=0
-        for i in `changed_paths_in_range \`get_compare_range | tr -d '/'\``; do
-          if [ `echo ${i} | grep -I 'Dockerfile' | wc -l` -gt 0 ]; then
-            counter=$((counter + 1))
-          fi
-        done
-        if [ "${counter}" -gt "1" ]; then
-            echo "ERROR: More than one Dockerfile commited!  Can only update one Dockerfile at a time"
-            exit 1
-        else
-            echo "Found single Dockerfile for update."
-            dockerFile=`find */*/*ocker*ile -maxdepth 0 -printf "%T@ %Tc %p\n" | sort -n | rev | cut -f1 -d ' ' | cut -f1,2,3 -d '/' | rev | tail -n1`
-            testFile="`echo ${dockerFile} | cut -f1,2 -d '/'`/unittest.yml";
-            dockerImage="bicf/`echo ${dockerFile} | cut -f1,2 -d '/' | tr -s '/' ':'`";
-            docker build -t ${dockerImage} -f ${dockerFile} --rm --no-cache .
-            python3 tests/imagecheck.py "bicf" ${testFile}
-        fi;
+        build_images "$DOCKERHUB_ORG" "$paths"
+        python3 tests/imagecheck.py "$DOCKERHUB_ORG" $paths
