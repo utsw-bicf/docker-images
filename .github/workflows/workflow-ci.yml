@@ -13,6 +13,7 @@ jobs:
         DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
         DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
         DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
+        DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
       run: |
         set -e
         source scripts/functions.sh
