@@ -46,16 +46,14 @@ function get_compare_range() {
     # Travis should check if this is a merge or not
     range_start="HEAD^1" # alias for first parent
     range_end="HEAD^2" # alias for second parent
-    diff_range="$range_start $range_end"
   else
     # Not on the deploy branch (e.g. master)
     # When not on the deploy branch, always compare with the deploy branch
     # Travis resets master to the tested commit, so we have to use origin/master
     range_start="$DEPLOY_BRANCH"
-    range_end="$current_branch"
-    diff_range="$range_start..$range_end"
+    range_end="HEAD"
   fi
-  echo $diff_range
+  echo "$range_start $range_end"
 }
 
 # Given a docker repo owner, image name, and version, produce a local docker build command
