@@ -17,4 +17,3 @@ RUN pip3 install --upgrade pip
 
 RUN pip3 install argparse==1.4.0 
 RUN conda install pandas=0.25.3
-
