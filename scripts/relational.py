@@ -13,139 +13,140 @@ import yaml
 
 RELATION_FILENAME = "relations.yaml"
 
-def check_parents():
+def write_yaml():
     """
-    Verifies that the parent images seen are the ones expected.
+    Overwrites the existing relations.yaml file with the new information provided, should only\
+        be called once per run
     """
-    listed_parents = ORIDATA['images'][DOCKER_IMAGE][IMAGE_VERSION]['parents']
-    found_parents = []
-    with open(DOCKERFILE_PATH, "r") as dockerfile:
-        for line in dockerfile:
-            if 'FROM ' in line:
-                found_parents += [line.split()[1].split('/')[-1]]
-    for parent in found_parents:
-        print("Verifying parent: " + parent)
-        if not parent in listed_parents:
-            sys.exit("Warning, Dockerfile lists " + parent + " as a parent image, but this is not listed in the YAML file.\nPlease re-version this image appropriately, as changes in parents may cause unforseen functionality changes.")
-        else:
-            print("Parent images validated, no changes made to relations.yaml") 
+    yaml_file = open(RELATION_FILENAME, "w")
+    yaml.safe_dump(NEWDATA, yaml_file)
+    yaml_file.close()
 
-def update_table(mod_image, mod_version, parent_images, child_images):
+def update_ancestor(parent, docker_image):
     """
-    Updates any changes to the image passed to it with the information passed to it
-    :param mod_image: str image name to be modified
-    :param IMAGE_VERSION: str image version to be modified
-    :param parent_images: str[] list of images that should be input as the parent images
-    :param child images: str[] list of images that should be input as the child images
+    Updates any ancestor entries tied with this image to include them in their child tables
+    :param parent: The parent image specified for updating
+    :param docker_image: The docker image specified for updating in 'image_name:image_version' format
     """
-    new_image = {
-        mod_image: {
-            mod_version: {
+    parent_name = parent.split(':')[0]
+    parent_version = parent.split(':')[1]
+    grandparent = []
+    new_children = []
+    if parent in ORIDATA['images']:
+        new_children = ORIDATA['images'][parent_name][parent_version]['children']
+        if (new_children == 'none') or (new_children == [None]) or (new_children == []):
+            new_children = [docker_image]
+        elif not docker_image in ORIDATA['images'][parent_name][parent_version]['children']:
+            new_children += [docker_image]
+        grandparent = ORIDATA['images'][parent_name][parent_version]['parents']
+    else:
+        new_children = [docker_image]
+    build_entry(parent_name, parent_version, grandparent, new_children)
+    
+def build_entry(image_name, image_version, parent_images, child_images):
+    """
+    Builds a new yaml entry from the parent and child information
+    :param image_name: The name of the image to be updated/created
+    :param image_version: The version of above to be updated
+    :param parents: The parent information for the enty
+    :param children: The children information for the entry
+    """
+    if image_name in ORIDATA['images']:
+        if image_version in ORIDATA['images'][image_name]:
+            for parent in ORIDATA['images'][image_name][image_version]['parents']:
+                if not parent in parent_images:
+                    parent_images += [parent]
+            for child in ORIDATA['images'][image_name][image_version]['children']:
+                if not child in child_images:
+                    child_images += [child]
+            if (len(child_images) > 1) and (None in child_images):
+                child_images.remove(None)
+            new_image = {
                 'parents': parent_images,
                 'children': child_images
             }
-        }
-    }
-    NEWDATA['images'].append(new_image)
-
-def update_ancestry(parent):
-    """
-    Finds the parent images to the called image, and updates their child field to include the new\
-        image
-    :param parent: str the parent image ID to be updated
-    :param IMAGE_VERSION: str the parent image version number to be checked
-    """
-    parent_image = parent.split(':')[0]
-    parent_version = parent.split(':')[1]
-    new_child_image = DOCKER_IMAGE + ':' + IMAGE_VERSION
-    new_child = ''
-    if parent_image in ORIDATA['images']:
-        new_child = ORIDATA['images'][parent_image][parent_version]['children']
-        if new_child == 'none':
-            new_child = [new_child_image]
+            NEWDATA['images'][image_name][image_version].update(new_image)
         else:
-            new_child += [new_child_image]
-    update_table(parent_image, parent_version, \
-        ORIDATA['images'][parent_image][parent_version]['parents'], new_child)
+            new_image = {
+                image_version: {
+                    'parents': parent_images,
+                    'children': child_images
+                }
+            }
+            NEWDATA['images'][image_name].update(new_image)
+    else:
+        new_image = {
+            image_name: {
+                image_version: {
+                    'parents': parent_images,
+                    'children': child_images
+                }
+            }
+        }
+        NEWDATA['images'].update(new_image)
+    return new_image
 
-def update_parent():
+def get_children(image_version, image_name):
     """
-    Finds the information regarding the parents entry for the new image
-    :param DOCKERFILE_PATH: str path to the Dockerfile to be searched
-    :param IMAGE_VERSION: str image version number to be checked, used as sub-entry to main image
+    Finds any children image in the relations.yaml file
+    """
+    if image_name in ORIDATA['images']:
+        if image_version in ORIDATA['images'][image_name]:
+            return ORIDATA['images'][image_name][image_version]['children']
+        else:
+            return [None]
+    else:
+        return [None]
+
+def get_parents():
+    """
+    Gets the parent information from the Dockerfile
     """
     parents = []
     with open(DOCKERFILE_PATH, "r") as dockerfile:
         for line in dockerfile:
             if 'FROM ' in line:
                 parents += [line.split()[1].split('/')[-1]]
-    for parent in parents:
-        update_ancestry(parent)
     return parents
 
-#Reads the Dockerfile to find the parent image, if there is any, and puts that information into
-#the yaml file.    It assumes no child images, since this is a new image.
-def build_entry(child_images):
+def load_yaml():
     """
-    Reads the Dockerfile to find the parent image, if any.
-    :param DOCKERFILE_PATH: str path to the Dockerfile to be read
-    :param IMAGE_VERSION: str image version to be used for the new entry
-    :param child_images: str list of all child images to be added
+    Loads a yaml file and returns a python yaml object
     """
-    parent = update_parent()
-    update_table(DOCKER_IMAGE, IMAGE_VERSION, parent, child_images)
-
-def write_new_yaml():
-    """
-    Overwrites the existing relations.yaml, should only be called once
-    """
-    yaml_file = open(RELATION_FILENAME, "w")
-    yaml.safe_dump(NEWDATA, yaml_file)
+    with open(RELATION_FILENAME) as yaml_file:
+        yaml_data = yaml.safe_load(yaml_file)
     yaml_file.close()
+    return yaml_data
 
-def check_image_exists():
-    """
-    Finds any existing images for the Dockerfile.    If an image is found with the name provided,\
-    it validates the information.    Otherwise, it creates a new table entry in the yaml.
-    :param DOCKERFILE_PATH: str path to the Dockerfile to be entered
-    :param IMAGE_VERSION: str image version for the associated Dockerfile
-    """
-    if DOCKER_IMAGE in ORIDATA['images']:
-        print("Existing image found, verifying version information")
-        if not IMAGE_VERSION in ORIDATA['images'][DOCKER_IMAGE]:
-            print("This appears to be an update to an existing image, running updater.")
-            build_entry("none")
-            write_new_yaml()
-        else:
-            print("This image and version already appear in relations.yaml, verifying information.")
-            check_parents()
-    else:
-        print("New image detected, building parent-child tree.")
-        build_entry("none")
-        write_new_yaml()
 
 def main():
     """
     Main method
     """
-    global DOCKER_IMAGE
     global ORIDATA
     global NEWDATA
     global DOCKERFILE_PATH
-    global IMAGE_VERSION
     if len(sys.argv) < 1:
         print("Usage python3 scripts/relational.py <DOCKERFILE_PATH>")
         sys.exit(1)
     else:
+    #Setup the global variables
         DOCKERFILE_PATH = os.path.abspath(sys.argv[1])
-        DOCKER_IMAGE = re.split('/', DOCKERFILE_PATH)[-3]
-        IMAGE_VERSION = re.split('/', DOCKERFILE_PATH)[-2]
-        with open(RELATION_FILENAME) as yaml_file:
-            ORIDATA = yaml.safe_load(yaml_file)
-        yaml_file.close()
-        with open(RELATION_FILENAME) as yaml_file:                                                                                                     NEWDATA = yaml.safe_load(yaml_file)
-        yaml_file.close()
-        check_image_exists()
+        image_name = re.split('/', DOCKERFILE_PATH)[-3]
+        image_version = re.split('/', DOCKERFILE_PATH)[-2]
+        docker_image = image_name + ':' + image_version
+        ORIDATA = load_yaml()
+        NEWDATA = load_yaml()
+        print(ORIDATA['images']['bicfbase']['1.0.0']['children'])
+        parents = get_parents()
+        children = get_children(image_version, image_name)
+    #Start by adding the image to the table
+        build_entry(image_name, image_version, parents, children)
+    #Update all parent images
+    for parent in parents:
+        update_ancestor(parent, docker_image)
+    #Write out the new relations.yaml
+    write_yaml()
 
 if __name__ == "__main__":
     main()
