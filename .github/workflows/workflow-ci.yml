@@ -24,7 +24,7 @@ jobs:
         print_changed "$compare_range" "$paths"
         docker_counter=`print_changed "$compare_range" "$paths" | grep -i "dockerfile" | wc -l`
         if [ "${docker_counter}" -gt "1" ]; then
-          echo -e "ERROR: Currently we only support uploading one Dockerfile at a time, please break these into separate issues."
+          echo -e "ERROR: Currently we only support uploading one Dockerfile at a time, please break these into separate branches."
           exit 1
         elif [ "${docker_counter}" -eq "1" ]; then
           echo "New or updated Dockerfile found, building image and running CI"
