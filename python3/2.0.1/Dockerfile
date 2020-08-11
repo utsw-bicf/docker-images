@@ -1,4 +1,4 @@
-FROM bicf/bicfbase:2.0.1_indev
+FROM bicf/bicfbase:2.0.1
 LABEL author="Jon Gesell"
 
 RUN apt-get install -y python3 python3-pip

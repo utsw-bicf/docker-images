@@ -1,7 +1,13 @@
 images:
   bicfbase:
-    1.0.0:
+    2.0.1:
       children:
-      - null 
+      - python3:2.0.1
       parents:
       - ubuntu:18.04
+  python3:
+    2.0.1:
+      children:
+      - null
+      parents:
+      - bicfbase:2.0.1
