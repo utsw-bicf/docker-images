@@ -20,7 +20,6 @@ jobs:
         set -e
         source scripts/functions.sh
         current_branch=$(current_branch_name)
-        git checkout ${current_branch}
         fetch_master
         #Check to see if more than one Dockerfile has been updated, and if so, error out.
         compare_range=$(get_compare_range)
@@ -39,7 +38,7 @@ jobs:
           git config user.email github-actions@github.com
           git add relations.yaml
           git commit -am "Updated relations.yaml"
-          git push
+          git push origin ${current_branch}
         else
           echo "No new images found, running CI only."
         fi
