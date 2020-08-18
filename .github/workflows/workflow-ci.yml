@@ -15,7 +15,6 @@ jobs:
         DOCKERHUB_ORG: bicf
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
       run: |
-        git pull
         set -e
         source scripts/functions.sh
         fetch_master
@@ -36,7 +35,7 @@ jobs:
           git config user.email github-actions@github.com
           git add relations.yaml
           git commit -am "Updated relations.yaml"
-          git push origin HEAD:refs/heads/HEAD
+          git push
         else
           echo "No new images found, running CI only."
         fi
