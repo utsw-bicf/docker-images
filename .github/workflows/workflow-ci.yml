@@ -31,6 +31,8 @@ jobs:
           build_images "${DOCKERHUB_ORG}" "${paths}"
           git show ${DEPLOY_BRANCH}:relations.yaml > relations.yaml
           python3 scripts/relational.py `print_changed "${compare_range}" "${paths}" | grep -i "dockerfile"`
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           git add relations.yaml
           git commit -m "Updated relations.yaml"
           git push
