@@ -137,7 +137,6 @@ def main():
         docker_image = image_name + ':' + image_version
         ORIDATA = load_yaml()
         NEWDATA = load_yaml()
-        print(ORIDATA['images']['bicfbase']['1.0.0']['children'])
         parents = get_parents()
         children = get_children(image_version, image_name)
     #Start by adding the image to the table
