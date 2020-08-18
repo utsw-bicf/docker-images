@@ -8,6 +8,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
     - name: Check Latest Docker Image
       env:
         DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
@@ -17,6 +19,8 @@ jobs:
       run: |
         set -e
         source scripts/functions.sh
+        current_branch=$(current_branch_name)
+        git checkout ${current_branch}
         fetch_master
         #Check to see if more than one Dockerfile has been updated, and if so, error out.
         compare_range=$(get_compare_range)
