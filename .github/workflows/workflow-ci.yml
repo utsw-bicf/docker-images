@@ -15,6 +15,7 @@ jobs:
         DOCKERHUB_ORG: bicf
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
       run: |
+        git pull
         set -e
         source scripts/functions.sh
         fetch_master
