@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   runci:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v2
@@ -34,14 +34,34 @@ jobs:
         elif [ "${docker_counter}" -eq "1" ]; then
           echo "New or updated Dockerfile found, building image and running CI"
           build_images "${DOCKERHUB_ORG}" "${paths}"
-          git show ${DEPLOY_BRANCH}:relations.yaml > relations.yaml
-          python3 scripts/relational.py `print_changed "${compare_range}" "${paths}" | grep -i "dockerfile"`
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add relations.yaml
-          git commit -am "Updated relations.yaml"
-          git push origin ${current_branch}
         else
           echo "No new images found, running CI only."
         fi
         python3 tests/imagecheck.py "${DOCKERHUB_ORG}" ${paths}
+  buildrelations:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+    - name: Add/check relations.yaml
+      env:
+        DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
+        DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
+        DOCKERHUB_ORG: bicf
+        DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
+      run: |
+        export LC_ALL=C.UTF-8
+        export LANG=C.UTF-8
+        set -e
+        source scripts/functions.sh
+        current_branch=$(current_branch_name)
+        git show ${DEPLOY_BRANCH}:relations.yaml > relations.yaml
+        python3 scripts/relational.py `print_changed "${compare_range}" "${paths}" | grep -i "dockerfile"`
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add relations.yaml
+        git commit -am "Updated relations.yaml"
+        git push origin ${current_branch}
+        cat relations.yaml
