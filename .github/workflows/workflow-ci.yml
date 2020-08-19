@@ -16,9 +16,9 @@ jobs:
         DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
         DOCKERHUB_ORG: bicf
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
+        LC_ALL: C.UTF-8
+        LANG: C.UTF-8
       run: |
-        export LC_ALL=C.UTF-8
-        export LANG=C.UTF-8
         set -e
         source scripts/functions.sh
         current_branch=$(current_branch_name)
@@ -45,12 +45,14 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 2
-    - name: Add/check relations.yaml
+    - name: Check Latest Docker Image
       env:
         DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
         DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
         DOCKERHUB_ORG: bicf
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
+        LC_ALL: C.UTF-8
+        LANG: C.UTF-8
       run: |
         set -e
         source scripts/functions.sh
