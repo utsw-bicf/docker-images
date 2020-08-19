@@ -47,10 +47,7 @@ jobs:
         fetch-depth: 2
     - name: Add/check relations.yaml
       env:
-        DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
-        DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
         DOCKERHUB_ORG: bicf
-        DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
         LC_ALL: C.UTF-8
         LANG: C.UTF-8
       run: |
