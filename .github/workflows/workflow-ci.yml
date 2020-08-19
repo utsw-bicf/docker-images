@@ -52,8 +52,6 @@ jobs:
         DOCKERHUB_ORG: bicf
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
       run: |
-        export LC_ALL=C.UTF-8
-        export LANG=C.UTF-8
         set -e
         source scripts/functions.sh
         current_branch=$(current_branch_name)
