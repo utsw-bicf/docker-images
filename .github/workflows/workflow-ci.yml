@@ -3,9 +3,10 @@ name: Standard Workflow CI
 on: [push]
 
 jobs:
+  
   runci:
     runs-on: ubuntu-18.04
-
+    
     steps:
     - uses: actions/checkout@v2
       with:
@@ -47,10 +48,7 @@ jobs:
         fetch-depth: 2
     - name: Check Latest Docker Image
       env:
-        DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
-        DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
         DOCKERHUB_ORG: bicf
-        DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
         LC_ALL: C.UTF-8
         LANG: C.UTF-8
       run: |
