@@ -43,7 +43,7 @@ jobs:
           git commit -am "Updated relations.yaml"
           git push origin ${current_branch}
           cat relations.yaml
-          echo ${current_branch_name}
+          echo ${GITHUB_REF##*/}
         else
           echo "No new images found, running CI only."
         fi
