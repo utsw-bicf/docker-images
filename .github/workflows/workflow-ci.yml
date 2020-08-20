@@ -10,6 +10,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+    - name: Check Build
       env:
         DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
         DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
@@ -17,9 +18,7 @@ jobs:
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
         LC_ALL: C.UTF-8
         LANG: C.UTF-8
-        CURRENT_BRANCH: ${{github.head_ref}}
-    - name: Check Build
-      
+        CURRENT_BRANCH: ${GITHUB_REF##*/}
       run: |
         set -e
         source scripts/functions.sh
