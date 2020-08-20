@@ -11,7 +11,7 @@ import re
 import yaml
 
 def check_version_info(master_version, image_version):
-     if re.match("[0-9]+\.[0-9]+\.[0-9]+"):
+     if re.match("[0-9]+.[0-9]+.[0-9]+"):
          if image_version.split(sep=".")[0] < master_version.split(sep=".")[0]:
                 print("Error: Proposed version number is less than the current master version.\nPlease incriment the version for this image correctly.")
                 return False
