@@ -47,6 +47,6 @@ jobs:
         git add relations.yaml
         git commit -m "Updated relations.yaml"
     - name: Push New Relations
-      uses: ad-m/github-push-action@14-docker_push
+      uses: ad-m/github-push-action@master
       with:
         github_token: ${{secrets.GITHUB_TOKEN}}
