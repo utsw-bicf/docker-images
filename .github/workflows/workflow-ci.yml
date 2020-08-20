@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 2
-    - name: Check Latest Docker Image
+    - name: Check Build
       env:
         DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
         DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
@@ -35,31 +35,6 @@ jobs:
           echo "New or updated Dockerfile found, building image and running CI"
           build_images "${DOCKERHUB_ORG}" "${paths}"
           python3 tests/imagecheck.py "${DOCKERHUB_ORG}" ${paths}
-        else
-          echo "No new images found, running CI only."
-        fi
-  buildrelations:
-    runs-on: ubuntu-18.04
-
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
-    - name: Add/check relations.yaml
-      env:
-        DOCKERHUB_ORG: bicf
-        LC_ALL: C.UTF-8
-        LANG: C.UTF-8
-      run: |
-        set -e
-        source scripts/functions.sh
-        current_branch=$(current_branch_name)
-        #Check to see if more than one Dockerfile has been updated, and if so, error out.
-        compare_range=$(get_compare_range)
-        paths=$(changed_paths_in_range "${compare_range}")
-        print_changed "${compare_range}" "${paths}"
-        docker_counter=`print_changed "${compare_range}" "${paths}" | grep -i "dockerfile" | wc -l`
-        if [ "${docker_counter}" -eq "1" ]; then
           git show ${DEPLOY_BRANCH}:relations.yaml > relations.yaml
           python3 scripts/relational.py `print_changed "${compare_range}" "${paths}" | grep -i "dockerfile"`
           git config user.name github-actions
@@ -68,9 +43,6 @@ jobs:
           git commit -am "Updated relations.yaml"
           git push origin ${current_branch}
           cat relations.yaml
-        elif [ "${docker_counter}" -gt "1" ]; then
-          echo -e "ERROR: Currently we only support uploading one Dockerfile at a time, please break these into separate branches."
-          exit 1
         else
           echo "No new images found, running CI only."
         fi
