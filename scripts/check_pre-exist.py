@@ -2,6 +2,7 @@
 """
 Receives a relations file and a docker image:version combination, and verifies that this image does not already exist in the master branch.
 If it exists in master, as these images are meant to be locked down and final, it errors out and tells the user to try another image version.  Otherwise, it allows procedure as normal.
+After this, it should build the image, push to DockerHub, and continue as normal.
 """
 
 import os
