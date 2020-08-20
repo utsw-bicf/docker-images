@@ -21,7 +21,7 @@ jobs:
       run: |
         set -e
         source scripts/functions.sh
-        current_branch=$(current_branch_name)
+        current_branch=`echo ${GITHUB_REF##*/}`
         fetch_master
         #Check to see if more than one Dockerfile has been updated, and if so, error out.
         compare_range=$(get_compare_range)
