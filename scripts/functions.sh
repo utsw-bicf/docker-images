@@ -4,7 +4,7 @@ function current_branch_name() {
   echo ${GITHUB_REF##*/}
 }
 
-function fetch_master()
+function fetch_develop()
 {
     # Keep track of which branch we are on.
     # We are on a detached head, and we need to be able to go back to it.
@@ -12,8 +12,8 @@ function fetch_master()
 
     current_branch=$(current_branch_name)
     if [[ "$current_branch" != "$DEPLOY_BRANCH" ]]; then
-        # If branch is not deploy branch (e.g. master)
-        # fetch the current master branch
+        # If branch is not deploy branch (e.g. develop)
+        # fetch the current develop branch
         # Travis clones with `--depth`, which
         # implies `--single-branch`, so we need to overwrite remote.origin.fetch to
         # do that.
@@ -35,6 +35,26 @@ function changed_paths_in_range() {
   git diff --name-only --diff-filter=d $compare_range
 }
 
+function fetch_master()
+{
+  #Fetches the master branch
+  #Very similar to fetch develop, but specifically points to master
+  local build_head=$(git rev-parse HEAD)
+
+  current_branch=$(current_branch_name)
+  if [[ "${current_branch}" != "origin/master"]]; then
+    # If the current branch is not master
+    # fetch the master branch
+    git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+    git fetch origin master
+
+    # create the tracking branch
+    git checkout -qf master
+
+    # finally, go beack to where we were at the beginning
+    git checkout ${build_head}
+  fi
+}
 
 # If the current branch is the deploy branch, return a range representing
 # the two parents of the HEAD's merge commit. If not, return a range comparing
@@ -42,14 +62,14 @@ function changed_paths_in_range() {
 function get_compare_range() {
   current_branch=$(current_branch_name)
   if [[ "$current_branch" == "$DEPLOY_BRANCH" ]]; then
-    # On the deploy branch (e.g. master)
+    # On the deploy branch (e.g. develop)
     # Travis should check if this is a merge or not
     range_start="HEAD^1" # alias for first parent
     range_end="HEAD^2" # alias for second parent
   else
-    # Not on the deploy branch (e.g. master)
+    # Not on the deploy branch (e.g. develop)
     # When not on the deploy branch, always compare with the deploy branch
-    # Travis resets master to the tested commit, so we have to use origin/master
+    # Travis resets develop to the tested commit, so we have to use origin/develop
     range_start="origin/$DEPLOY_BRANCH"
     range_end="HEAD"
   fi
