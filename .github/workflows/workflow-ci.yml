@@ -41,7 +41,7 @@ jobs:
           git config user.email github-actions@github.com
           git add relations.yaml
           git commit -am "Updated relations.yaml"
-          git push
+          git push origin ${current_branch}
           cat relations.yaml
           echo ${current_branch_name}
         else
