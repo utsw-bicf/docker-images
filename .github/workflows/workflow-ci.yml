@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-depth: 2
+        fetch-depth: 0
     - name: Check Build
       env:
         DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
@@ -39,7 +39,7 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add relations.yaml
-          git commit -am "Updated relations.yaml"
+          git commit -m "Updated relations.yaml"
           git push origin ${GITHUB_REF##*/}
           echo "Updated file:"
           cat relations.yaml
