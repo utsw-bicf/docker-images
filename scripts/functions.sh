@@ -42,7 +42,7 @@ function fetch_master()
   local build_head=$(git rev-parse HEAD)
 
   current_branch=$(current_branch_name)
-  if [[ "${current_branch}" != "origin/master"]]; then
+  if [[ "${current_branch}" != "origin/master" ]]; then
     # If the current branch is not master
     # fetch the master branch
     git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
