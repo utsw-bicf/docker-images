@@ -50,14 +50,14 @@ def check_exists(master_yaml, image_name, image_version):
           print("New image found, proceeding with build/push, and updating relations.yaml.")
           return True
 
-def load_yaml(yaml_file):
+def load_yaml(master_yaml):
      """
      Loads a yaml file and returns a python yaml object
      :param yaml_file: the yaml file to open and read
      """
-     with open(yaml_file) as yf:
-          yaml_data = yaml.safe_load(yf)
-     yf.close()
+     with open(master_yaml) as yaml_file:
+          yaml_data = yaml.safe_load(yaml_file)
+     yaml_file.close()
      return yaml_data
 
 def main():
@@ -69,9 +69,10 @@ def main():
           print("Usage python3 scripts/check_pre-exist.py <master relations.yaml> <Dockerfile path>")
           sys.exit(1)
      else:
-          master_yaml = load_yaml(sys.argv[0])
-          image_name = re.split('/', sys.argv[1])[-3]
-          image_version = re.split('/', sys.argv[1])[-2]
+          print(os.path.abspath(sys.argv[1]))
+          master_yaml = load_yaml(os.path.abspath(sys.argv[1]))
+          image_name = re.split('/', os.path.abspath(sys.argv[2]))[-3]
+          image_version = re.split('/', os.path.abspath(sys.argv[2]))[-2]
           if check_exists(master_yaml, image_name, image_version):
                 print ("New image found, proceeding to build, push to DockerHub, and add it to the 'relations.yaml' file.")
           else:
