@@ -40,8 +40,7 @@ jobs:
           git config user.email github-actions@github.com
           git add relations.yaml
           git commit -am "Updated relations.yaml"
-          git push origin ${GITHUB_REF##*/}
-          cat relations.yaml
+          echo "git push origin ${GITHUB_REF##*/}"
         else
           echo "No new images found, running CI only."
         fi
