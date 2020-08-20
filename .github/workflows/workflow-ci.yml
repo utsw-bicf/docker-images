@@ -41,6 +41,9 @@ jobs:
           git add relations.yaml
           git commit -am "Updated relations.yaml"
           git push origin ${GITHUB_REF##*/}
+          echo "Updated file:"
+          cat relations.yaml
+          echo -e "\n\nFile in branch:"
           git show ${GITHUB_REF##*/}:relations.yaml
         else
           echo "No new images found, running CI only."
