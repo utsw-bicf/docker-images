@@ -16,7 +16,6 @@ jobs:
         DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
         DOCKERHUB_ORG: bicf
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
-        CURRENT_BRANCH: ${GITHUB_REF##*/}
         LC_ALL: C.UTF-8
         LANG: C.UTF-8
       run: |
@@ -41,7 +40,8 @@ jobs:
           git config user.email github-actions@github.com
           git add relations.yaml
           git commit -am "Updated relations.yaml"
-          echo "git push origin ${CURRENT_BRANCH}"
+          git push origin ${GITHUB_REF##*/}
+          git show ${GITHUB_REF##*/}:relations.yaml
         else
           echo "No new images found, running CI only."
         fi
