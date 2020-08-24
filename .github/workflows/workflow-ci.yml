@@ -45,7 +45,7 @@ jobs:
           git show ${DEPLOY_BRANCH}:relations.yaml > relations.yaml
           python3 scripts/relational.py `print_changed "${compare_range}" "${paths}" | grep -i "dockerfile"`
         else
-          echo "No new images found, running CI only."
+          echo "No new images found, running CI only.  Good luck."
         fi
     - name: Commit and Push New Relations
       run: |
