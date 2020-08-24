@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-depth: 0
+        fetch-depth: 2
     - name: Check Build
       env:
         DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
@@ -25,6 +25,7 @@ jobs:
         git config user.name github-actions
         git config user.email github-actions@github.com
         fetch_develop
+        git checkout HEAD^
         #Check to see if more than one Dockerfile has been updated, and if so, error out.
         compare_range=$(get_compare_range)
         paths=$(changed_paths_in_range "${compare_range}")
@@ -46,14 +47,10 @@ jobs:
         else
           echo "No new images found, running CI only."
         fi
-    - name: Commit New Relations
+    - name: Commit and Push New Relations
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add relations.yaml
         git commit -m "Updated relations.yaml"
-    - name: Push New Relations
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{secrets.GITHUB_TOKEN}}
-        branch: ${{ github.ref }}
+        git push
