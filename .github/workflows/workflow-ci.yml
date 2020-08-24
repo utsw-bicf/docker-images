@@ -18,7 +18,6 @@ jobs:
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
         LC_ALL: C.UTF-8
         LANG: C.UTF-8
-        CURRENT_BRANCH: ${GITHUB_REF##*/}
       run: |
         set -e
         source scripts/functions.sh
@@ -54,6 +53,8 @@ jobs:
         git commit --allow-empty -m "Updated relations.yaml"
     - name: Push New Relations
       uses: ad-m/github-push-action@master
+      env:
+        CURRENT_BRANCH: ${GITHUB_REF##*/}
       with:
         github_token: ${{secrets.GITHUB_TOKEN}}
-        INPUT_BRANCH: ${{ github.ref }}
+        branch: ${CURRENT_BRANCH}
