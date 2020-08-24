@@ -36,7 +36,7 @@ jobs:
         elif [ "${docker_counter}" -eq "1" ]; then
           echo "New or updated Dockerfile found, building image and running CI"
           #Check to see if the proposed version already exists in master
-          git show origin/master:relations.yaml > master_relation.yml
+          git show master:relations.yaml > master_relation.yml
           python3 scripts/check_pre-exist.py master_relation.yml `print_changed "${compare_range}" "${paths}" | grep -i "dockerfile"`
           rm master_relation.yml
           build_images "${DOCKERHUB_ORG}" "${paths}"
