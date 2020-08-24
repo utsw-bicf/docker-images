@@ -20,7 +20,6 @@ jobs:
         LANG: C.UTF-8
         CURRENT_BRANCH: ${GITHUB_REF##*/}
       run: |
-        git checkout HEAD^
         set -e
         source scripts/functions.sh
         git config user.name github-actions
@@ -57,4 +56,4 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{secrets.GITHUB_TOKEN}}
-        branch: ${{ github.ref }}
+        branch: ${CURRENT_BRANCH}
