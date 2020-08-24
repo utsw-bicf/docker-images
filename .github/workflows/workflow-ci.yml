@@ -41,13 +41,3 @@ jobs:
         else
           echo "No new images found, running CI only."
         fi
-    - name: Commit New Relations
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git add relations.yaml
-        git commit -m "Updated relations.yaml"
-    - name: Push New Relations
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{secrets.GITHUB_TOKEN}}
