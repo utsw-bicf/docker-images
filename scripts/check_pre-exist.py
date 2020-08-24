@@ -11,6 +11,11 @@ import re
 import yaml
 
 def check_version_info(master_version, image_version):
+     """
+     Verifies that the versioning follows our guidelines and that it is actually an increment, and not any sort of decrement.
+     :param master_version: version of the Dockerfile specified in Master branch
+     :param image_version: version of the proposed new Dockerfile
+     """
      if re.match("[0-9]+.[0-9]+.[0-9]+"):
          if image_version.split(sep=".")[0] < master_version.split(sep=".")[0]:
                 print("Error: Proposed version number is less than the current master version.\nPlease incriment the version for this image correctly.")
