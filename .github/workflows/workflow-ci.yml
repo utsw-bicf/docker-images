@@ -66,5 +66,5 @@ jobs:
         DOCKERHUB_ORG: bicf
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
       run:
-        docker login -u \"${DOCKERHUB_UN}\" -p \"${DOCKERHUB_PW}\" ${DOCKERHUB_ORG}
+        docker login -u ${DOCKERHUB_UN} -p ${DOCKERHUB_PW} ${DOCKERHUB_ORG}
         docker push ${DOCKERHUB_ORG}/${IMAGE_NAME}:${IMAGE_VERSION}
