@@ -46,6 +46,7 @@ jobs:
           image_version=`echo ${docker_file} | rev | cut -f2 -d '/' | rev`
           echo "::set-env name=IMAGE_NAME::`echo ${image_name}`"
           echo "::set-env name=IMAGE_VERSION::`echo ${image_version}`"
+          echo -e "${image_name}\t${image_version}"
         else
           echo "No new images found, running CI only."
         fi
@@ -68,7 +69,7 @@ jobs:
       env: 
         DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
         DOCKER_USERNAME: ${{secrets.BICF_DOCKERHUB_UN}}
-        
+
     - name: Push to Docker Hub
       uses: actions-hub/docker@master
       env:
