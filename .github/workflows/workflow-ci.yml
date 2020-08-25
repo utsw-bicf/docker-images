@@ -66,5 +66,5 @@ jobs:
         DOCKER_USERNAME: ${{secrets.BICF_DOCKERHUB_UN}}
         DOCKERHUB_ORG: bicf
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
-      run:
-        docker push ${DOCKERHUB_ORG}/${IMAGE_NAME}:${IMAGE_VERSION}
+      with:
+        args: push ${DOCKERHUB_ORG}/${IMAGE_NAME}:${IMAGE_VERSION}
