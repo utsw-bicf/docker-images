@@ -44,9 +44,8 @@ jobs:
           python3 scripts/relational.py ${docker_file}
           image_name=`echo ${docker_file} | rev | cut -f3 -d '/' | rev`
           image_version=`echo ${docker_file} | rev | cut -f2 -d '/' | rev`
-          echo "::set-env name=IMAGE_NAME::`echo ${image_name}`"
-          echo "::set-env name=IMAGE_VERSION::`echo ${image_version}`"
-          echo -e "${image_name}\t${image_version}"
+          docker_image=`echo -e "${image_name}:${image_version"`
+          echo "::set-env name=DOCKER_IMAGE::`echo ${docker_image}`"
         else
           echo "No new images found, running CI only."
         fi
@@ -75,4 +74,4 @@ jobs:
       env:
         DOCKERHUB_ORG: bicf
       with:
-        args: push ${DOCKERHUB_ORG}/${IMAGE_NAME}:${IMAGE_VERSION}
+        args: push ${DOCKERHUB_ORG}/${DOCKER_IMAGE}
