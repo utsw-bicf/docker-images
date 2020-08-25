@@ -60,11 +60,11 @@ jobs:
         github_token: ${{secrets.GITHUB_TOKEN}}
         branch: "${{ github.ref }}"
     - name: Push to Docker Hub
+      uses: actions-hub/docker@master
       env:
-        DOCKERHUB_PW: ${{secrets.BICF_DOCKERHUB_PW}}
-        DOCKERHUB_UN: ${{secrets.BICF_DOCKERHUB_UN}}
+        DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
+        DOCKER_USERNAME: ${{secrets.BICF_DOCKERHUB_UN}}
         DOCKERHUB_ORG: bicf
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
       run:
-        docker login -u ${DOCKERHUB_UN} -p ${DOCKERHUB_PW} ${DOCKERHUB_ORG}
         docker push ${DOCKERHUB_ORG}/${IMAGE_NAME}:${IMAGE_VERSION}
