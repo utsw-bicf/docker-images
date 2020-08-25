@@ -35,12 +35,12 @@ jobs:
           #Check to see if the proposed version already exists in master
           git show origin/master:relations.yaml > master_relation.yml
           docker_file=`print_changed "${compare_range}" "${paths}" | grep -i "dockerfile"`
-          python3 scripts/check_pre-exist.py master_relation.yml `print_changed "${compare_range}" "${paths}" | grep -i "dockerfile"`
+          python3 scripts/check_pre-exist.py master_relation.yml ${docker_file}
           rm master_relation.yml
           build_images "${DOCKERHUB_ORG}" "${paths}"
           python3 tests/imagecheck.py "${DOCKERHUB_ORG}" ${paths}
           git show ${DEPLOY_BRANCH}:relations.yaml > relations.yaml
-          python3 scripts/relational.py `print_changed "${compare_range}" "${paths}" | grep -i "dockerfile"`
+          python3 scripts/relational.py ${docker_file}
           image_name=`echo ${docker_file} | rev | cut -f3 -d '/' | rev`
           image_version=`echo ${docker_file} | rev | cut -f2 -d '/' | rev`
           echo "::set-env name=IMAGE_NAME::`echo ${image_name}`"
@@ -66,5 +66,5 @@ jobs:
         DOCKERHUB_ORG: bicf
         DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
       run:
-        echo "docker login -u \"${DOCKERHUB_UN}\" -p \"${DOCKERHUB_PW}\" ${DOCKERHUB_ORG}"
-        echo "docker push ${DOCKERHUB_ORG}/${IMAGE_NAME}:${IMAGE_VERSION}"
+        docker login -u \"${DOCKERHUB_UN}\" -p \"${DOCKERHUB_PW}\" ${DOCKERHUB_ORG}
+        docker push ${DOCKERHUB_ORG}/${IMAGE_NAME}:${IMAGE_VERSION}
