@@ -1,0 +1,3 @@
+commands:
+  - cmd: "-c \"java --version\""
+    expect_text: "openjdk 12.0.2 2019-07-16*"
