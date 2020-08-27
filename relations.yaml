@@ -1,8 +1,12 @@
 images:
   bicfbase:
     2.0.1:
-      children: ['python3:2.0.1']
+      children: ['java12:2.0.1', 'python3:2.0.1']
       parents: ['ubuntu:18.04']
+  java12:
+    2.0.1:
+      children: [null]
+      parents: ['bicfbase:2.0.1']
   python3:
     2.0.1:
       children: [null]
