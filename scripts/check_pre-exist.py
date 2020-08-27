@@ -20,30 +20,34 @@ def check_version_info(master_version, image_version):
      """
      if re.match("[0-9]+.[0-9]+.[0-9]+"):
           if image_version.split(sep=".")[0] < master_version.split(sep=".")[0]:
-                print("Error: Proposed major version number is less than the current major version number on master.\nPlease incriment the\
-                     version for this image correctly.")
+                print("Error: Proposed major version number {} is less than the current major version number on master {}.\nPlease\
+                      incriment the version for this image correctly.".format(image_version.split(sep=".")[0], 
+                      master_version.split(sep=".")[0]), file=sys.stderr)
                 return False
           elif master_version.split(sep=".")[0] == image_version.split(sep=".")[0]:
                if image_version.split(sep=".")[1] < master_version.split(sep=".")[1]:
-                     print("Error: Proposed minor version number for major version" . image_version.split(sep=".")[0]
-                          . " is less than the current minor version on master.\nPlease incriment the version for this image correctly.")
-                     return False
+                    print("Error: Proposed minor version revision number {}.{} is less than or equal the current master version: {}.{}\
+                         \nPlease incriment the version for this image correctly.".format(image_version.split(sep=".")[0], 
+                         image_version.split(sep=".")[1], master_version.split(sep=".")[0], master_version.split(sep=".")[1]), file=sys.stderr)
+                    return False
                elif  image_version.split(sep=".")[1] == master_version.split(sep=".")[1]:
                     if  image_version.split(sep=".")[2] <= master_version.split(sep=".")[2]:
-                          print("Error: Proposed version number is less than or equal the current master version: " . image_version . "\n\
-                               Please incriment the version for this image correctly.")
+                          print("Error: Proposed patch version number {} is less than or equal the current master version: {}\n\ Please \
+                               incriment the version for this image correctly.".format(image_version, master_version), file=sys.stderr)
                           return False
                     else:
                           print("Versioning appears to have incrimented, proceeding with build.")
                           return True
                else:
-                    print("The new image minor version for major version" . image_version.split(sep=".")[0] . " is greater than the \
-                         existing minor version, proceeding.")
+                    print("The new image minor version number {}.{} is greater than the existing minor version {}.{}, proceeding.".format(
+                         image_version.split(sep=".")[0], image_version.split(sep=".")[1], master_version.split(sep=".")[0], 
+                         master_version.split(sep=".")[1]), file=sys.stderr)
           else:
-               print("New image has greater major version number, proceeding.")
+               print("New image has greater major version number {} than master {}, proceeding.".format(image_version.split(sep=".")[0],
+               master_version.split(sep=".")[0]), file=sys.stderr)
      else:
           print("Error: the version number does not match our default pattern: '0.0.0'.\nPlease re-name the directory to match this \
-               structure.")
+               structure.", file=sys.stderr)
           return False
 
 
@@ -55,16 +59,16 @@ def check_exists(master_yaml, image_name, image_version):
      :param image_version: the version of said Docker image to search for
      """
      if image_name in master_yaml['images']:
-          print("Found an image with the same name, checking for versions.")
+          print("Found an image with the same name, checking for versions.", file=sys.stderr)
           if image_version in master_yaml['images'][image_name]:
                 print ("Error: Found duplicated image and version already present in Master\n\
-                     Cannot proceed, please change the image version to avoide overwritting a locked image.")
+                     Cannot proceed, please change the image version to avoide overwritting a locked image.", file=sys.stderr)
                 return False
           else:
-                print ("New version of this image found, verifying that this is an updated version number")
+                print ("New version of this image found, verifying that this is an updated version number", file=sys.stderr)
                 return check_version_info(master_yaml['images'][image_name][-1], image_version)
      else:
-          print("New image found, proceeding with build/push, and updating relations.yaml.")
+          print("New image found, proceeding with build/push, and updating relations.yaml.", file=sys.stderr)
           return True
 
 
@@ -88,12 +92,12 @@ def main():
           print("Usage python3 scripts/check_pre-exist.py <master relations.yaml> <Dockerfile path>")
           sys.exit(1)
      else:
-          master_yaml = load_yaml(os.path.abspath(sys.argv[1]))
+          master_yaml = load_yaml(os.path.abspath(sys.argv[1])), file=sys.stderr
           print(os.path.abspath(sys.argv[2]))
           image_name = re.split('/', os.path.abspath(sys.argv[2]))[-3]
           image_version = re.split('/', os.path.abspath(sys.argv[2]))[-2]
           if check_exists(master_yaml, image_name, image_version):
-                print ("New image found, proceeding to build, push to DockerHub, and add it to the 'relations.yaml' file.")
+                print ("New image found, proceeding to build, push to DockerHub, and add it to the 'relations.yaml' file.", file=sys.stderr)
           else:
                 sys.exit(1)
 
