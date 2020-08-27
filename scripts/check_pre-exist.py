@@ -92,7 +92,7 @@ def main():
           print("Usage python3 scripts/check_pre-exist.py <master relations.yaml> <Dockerfile path>")
           sys.exit(1)
      else:
-          master_yaml = load_yaml(os.path.abspath(sys.argv[1])), file=sys.stderr
+          master_yaml = load_yaml(os.path.abspath(sys.argv[1]))
           print(os.path.abspath(sys.argv[2]))
           image_name = re.split('/', os.path.abspath(sys.argv[2]))[-3]
           image_version = re.split('/', os.path.abspath(sys.argv[2]))[-2]
