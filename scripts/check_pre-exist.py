@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Receives a relations file and a docker image:version combination, and verifies that this image does not already exist in the master branch.
-If it exists in master, as these images are meant to be locked down and final, it errors out and tells the user to try another image version.  Otherwise, it allows procedure as normal.
+If it exists in master, as these images are meant to be locked down and final, it errors out and tells the user to try another image 
+version.  Otherwise, it allows procedure as normal.
 After this, it should build the image, push to DockerHub, and continue as normal.
 """
 
@@ -10,6 +11,7 @@ import sys
 import re
 import yaml
 
+
 def check_version_info(master_version, image_version):
      """
      Verifies that the versioning follows our guidelines and that it is actually an increment, and not any sort of decrement.
@@ -17,23 +19,33 @@ def check_version_info(master_version, image_version):
      :param image_version: version of the proposed new Dockerfile
      """
      if re.match("[0-9]+.[0-9]+.[0-9]+"):
-         if image_version.split(sep=".")[0] < master_version.split(sep=".")[0]:
-                print("Error: Proposed version number is less than the current master version.\nPlease incriment the version for this image correctly.")
+          if image_version.split(sep=".")[0] < master_version.split(sep=".")[0]:
+                print("Error: Proposed major version number is less than the current major version number on master.\nPlease incriment the\
+                     version for this image correctly.")
                 return False
-         elif master_version.split(sep=".")[0] == image_version.split(sep=".")[0]:
-                if image_version.split(sep=".")[1] < master_version.split(sep=".")[1]:
-                     print("Error: Proposed version number is less than the current master version.\nPlease incriment the version for this image correctly.")
+          elif master_version.split(sep=".")[0] == image_version.split(sep=".")[0]:
+               if image_version.split(sep=".")[1] < master_version.split(sep=".")[1]:
+                     print("Error: Proposed minor version number for major version" . image_version.split(sep=".")[0]
+                          . " is less than the current minor version on master.\nPlease incriment the version for this image correctly.")
                      return False
-                elif  image_version.split(sep=".")[1] == master_version.split(sep=".")[1]:
-                     if  image_version.split(sep=".")[2] <= master_version.split(sep=".")[2]:
-                          print("Error: Proposed version number is less than or equal the current master version.\nPlease incriment the version for this image correctly.")
+               elif  image_version.split(sep=".")[1] == master_version.split(sep=".")[1]:
+                    if  image_version.split(sep=".")[2] <= master_version.split(sep=".")[2]:
+                          print("Error: Proposed version number is less than or equal the current master version: " . image_version . "\n\
+                               Please incriment the version for this image correctly.")
                           return False
-                     else:
+                    else:
                           print("Versioning appears to have incrimented, proceeding with build.")
                           return True
+               else:
+                    print("The new image minor version for major version" . image_version.split(sep=".")[0] . " is greater than the \
+                         existing minor version, proceeding.")
+          else:
+               print("New image has greater major version number, proceeding.")
      else:
-          print("Error: the version number does not match our default pattern: '0.0.0'.\nPlease re-name the directory to match this structure.")
+          print("Error: the version number does not match our default pattern: '0.0.0'.\nPlease re-name the directory to match this \
+               structure.")
           return False
+
 
 def check_exists(master_yaml, image_name, image_version):
      """
@@ -55,6 +67,7 @@ def check_exists(master_yaml, image_name, image_version):
           print("New image found, proceeding with build/push, and updating relations.yaml.")
           return True
 
+
 def load_yaml(master_yaml):
      """
      Loads a yaml file and returns a python yaml object
@@ -64,6 +77,7 @@ def load_yaml(master_yaml):
           yaml_data = yaml.safe_load(yaml_file)
      yaml_file.close()
      return yaml_data
+
 
 def main():
      """

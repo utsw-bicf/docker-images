@@ -13,6 +13,7 @@ import yaml
 
 RELATION_FILENAME = "relations.yaml"
 
+
 def write_yaml():
     """
     Overwrites the existing relations.yaml file with the new information provided, should only\
@@ -21,6 +22,7 @@ def write_yaml():
     yaml_file = open(RELATION_FILENAME, "w")
     yaml.safe_dump(NEWDATA, yaml_file)
     yaml_file.close()
+
 
 def update_ancestor(parent, docker_image):
     """
@@ -43,6 +45,7 @@ def update_ancestor(parent, docker_image):
         new_children = [docker_image]
     build_entry(parent_name, parent_version, grandparent, new_children)
     
+
 def build_entry(image_name, image_version, parent_images, child_images):
     """
     Builds a new yaml entry from the parent and child information
@@ -86,6 +89,7 @@ def build_entry(image_name, image_version, parent_images, child_images):
         NEWDATA['images'].update(new_image)
     return new_image
 
+
 def get_children(image_version, image_name):
     """
     Finds any children image in the relations.yaml file
@@ -98,6 +102,7 @@ def get_children(image_version, image_name):
     else:
         return [None]
 
+
 def get_parents():
     """
     Gets the parent information from the Dockerfile
@@ -108,6 +113,7 @@ def get_parents():
             if 'FROM ' in line:
                 parents += [line.split()[1].split('/')[-1]]
     return parents
+
 
 def load_yaml():
     """
