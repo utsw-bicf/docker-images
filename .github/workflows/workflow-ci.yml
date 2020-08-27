@@ -27,8 +27,7 @@ jobs:
         compare_range=$(get_compare_range)
         paths=$(changed_paths_in_range "${compare_range}")
         print_changed "${compare_range}" "${paths}"
-        docker_counter=`print_changed "${compare_range}" "${paths}" | grep -i "/:w
-        dockerfile" | wc -l`
+        docker_counter=`print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile" | wc -l`
         if [ "${docker_counter}" -gt "1" ]; then
           echo -e "ERROR: Currently we only support uploading one Dockerfile at a time, please break these into separate branches."
           exit 1
