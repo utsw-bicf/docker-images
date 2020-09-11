@@ -3,7 +3,7 @@ LABEL author="Jon Gesell"
 
 #Install the dependencies for Singularity and Nextflow
 RUN add-apt-repository ppa:deadsnakes/ppa && \
-    apt-get install -y libseccomp-dev pkg-config squashfs-tools cryptsetup libssl-dev uuid-dev python3.7 python3-pip curl
+    apt-get install -y libseccomp-dev pkg-config squashfs-tools cryptsetup libssl-dev uuid-dev python3.7 python3-pip curl git
 
 #Install Pip and Miniconda
 ENV PATH="/miniconda/bin:${PATH}"
