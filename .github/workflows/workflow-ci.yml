@@ -64,7 +64,7 @@ jobs:
           fi
   commit_new_release:
     needs: check_build
-    if: ${{ steps.Check_Build.outputs.buildType == alive }}
+    if: ${{ check_build.Check_Build.outputs.buildType == alive }}
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
