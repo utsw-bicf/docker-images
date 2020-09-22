@@ -47,7 +47,7 @@ jobs:
           image_version=`echo ${docker_file} | rev | cut -f2 -d '/' | rev`
           docker_image=`echo -e "${image_name}:${image_version}"`
           echo "::set-env name=DOCKER_IMAGE::`echo ${DOCKERHUB_ORG}/${docker_image}`"
-          echo "::set-env name=CONTINUE::'True'""
+          echo "::set-env name=CONTINUE::'True'"
         else
           echo "No new images found, running CI only."
           for i in `find * -maxdepth 0 -type d | grep -v "^scripts$\|^tests$"`; do 
