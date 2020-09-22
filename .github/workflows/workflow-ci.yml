@@ -15,7 +15,7 @@ jobs:
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
           LC_ALL: C.UTF-8
           LANG: C.UTF-8
-          CONTINUE: False
+          CONTINUE: ${{ false }}
         run: |
           set -e
           source scripts/functions.sh
@@ -45,12 +45,12 @@ jobs:
             image_version=`echo ${docker_file} | rev | cut -f2 -d '/' | rev`
             docker_image=`echo -e "${image_name}:${image_version}"`
             echo "::set-env name=DOCKER_IMAGE::`echo ${DOCKERHUB_ORG}/${docker_image}`"
-            echo "::set-env name=CONTINUE::\"True\"""
+            echo "::set-env name=CONTINUE::${{ true }}"
           else
             echo "No new images found, running CI only."
             for i in `find * -maxdepth 0 -type d | grep -v "^scripts$\|^tests$"`; do 
               latest_file=`find ${i}/*/Docker*ile -printf "%T@ %Tc %p\n" | sort -n | tail -n 1 | cut -f9 -d ' '`; 
-              python3 tests/imagecheck.py "bicf" "${latest_file}"; 
+              python3 tests/imagecheck.py "bicf" "${latest_file}";
               done
           fi
   commit_new_release:
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-        if: ${{ CONTINUE == "True" }}
+        if: env.CONTINUE == ${{ true }}
         with:
           fetch-depth: 0
       - id: Commit New Relations
@@ -70,7 +70,7 @@ jobs:
 
       - id: Push New Relations
         uses: ad-m/github-push-action@master
-        if: ${{ CONTINUE == "True" }}
+        if: env.CONTINUE == ${{ true }}
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           branch: "${{ github.ref }}"
@@ -80,13 +80,13 @@ jobs:
     steps:
       - id: DockerHub login
         uses: actions-hub/docker/login@master
-        if: ${{ CONTINUE == "True" }}
+        if: env.CONTINUE == ${{ true }}
         env:
           DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
           DOCKER_USERNAME: ${{secrets.BICF_DOCKERHUB_UN}}
 
       - id: Push to Docker Hub
         uses: actions-hub/docker@master
-        if: ${{ CONTINUE == "True" }}
+        if: env.CONTINUE == ${{ true }}
         with:
           args: push ${DOCKER_IMAGE}
