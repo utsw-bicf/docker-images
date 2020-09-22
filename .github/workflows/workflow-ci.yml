@@ -63,7 +63,7 @@ jobs:
           fi
   commit_new_release:
     needs: check_build
-    if: ${{ check_build.steps.checkBuild.CONTINUE == $(echo 'alive') }}
+    if: ${{ steps.checkBuild.CONTINUE == $(echo 'alive') }}
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
