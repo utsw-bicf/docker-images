@@ -50,7 +50,7 @@ jobs:
             echo "No new images found, running CI only."
             ls
             for i in `find * -maxdepth 0 -type d | grep -v "^scripts$\|^tests$"`; do 
-              latest_file=`find ${i}/*/Docker*ile -printf "%T@ %Tc %p\n" | sort -n | tail -n 1 | cut -f9 -d ' '`; 
+              latest_file=`find ${i}/*/* -printf "%T@ %Tc %p\n" | grep -i "/dockerfile$" | sort -n | tail -n 1 | cut -f9 -d ' '`; 
               echo ${latest_file}
               python3 tests/imagecheck.py "bicf" ${latest_file};
               done
