@@ -48,7 +48,7 @@ jobs:
             echo "::set-env name=CONTINUE::${{ true }}"
           else
             echo "No new images found, running CI only."
-            ls -lorthap
+            /usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/'
             for i in `/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/'`; do
               python3 tests/imagecheck.py "${DOCKERHUB_ORG}" `/usr/bin/find ${i}/*/* -printf "%T@ %Tc %p\n" | grep -i "/dockerfile$" | sort -n | tail -n 1 | cut -f9 -d ' '`
               done
