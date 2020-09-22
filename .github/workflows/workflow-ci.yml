@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-        if: ${{ env.CONTINUE == "True" }}
+        if: ${{ CONTINUE == "True" }}
         with:
           fetch-depth: 0
       - id: Commit New Relations
@@ -70,7 +70,7 @@ jobs:
 
       - id: Push New Relations
         uses: ad-m/github-push-action@master
-        if: ${{ env.CONTINUE == "True" }}
+        if: ${{ CONTINUE == "True" }}
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           branch: "${{ github.ref }}"
@@ -80,13 +80,13 @@ jobs:
     steps:
       - id: DockerHub login
         uses: actions-hub/docker/login@master
-        if: ${{ env.CONTINUE == "True" }}
+        if: ${{ CONTINUE == "True" }}
         env:
           DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
           DOCKER_USERNAME: ${{secrets.BICF_DOCKERHUB_UN}}
 
       - id: Push to Docker Hub
         uses: actions-hub/docker@master
-        if: ${{ env.CONTINUE == "True" }}
+        if: ${{ CONTINUE == "True" }}
         with:
           args: push ${DOCKER_IMAGE}
