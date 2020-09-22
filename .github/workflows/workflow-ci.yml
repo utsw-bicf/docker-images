@@ -5,6 +5,10 @@ on: [push]
 jobs:
   check_build:
     runs-on: ubuntu-18.04
+    outputs:
+      buildType:
+        value: ${{ steps.Check_Build.outputs.buildType }}
+        description: "Outputs the type of build that was done, either dead or alive."
     steps:
       - uses: actions/checkout@v2
         with:
@@ -29,6 +33,7 @@ jobs:
           docker_counter=$(print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile$" | wc -l)
           if [ "${docker_counter}" -gt "1" ]; then
             echo -e "ERROR: Currently we only support uploading one Dockerfile at a time, please break these into separate branches."
+            echo "::set-output name=buildType::$(echo 'dead')"
             exit 1
           elif [ "${docker_counter}" -eq "1" ]; then
             echo "New or updated Dockerfile found, building image and running CI"
@@ -45,17 +50,21 @@ jobs:
             image_version=$(echo ${docker_file} | rev | cut -f2 -d '/' | rev)
             docker_image=$(echo -e "${image_name}:${image_version}")
             echo "::set-env name=DOCKER_IMAGE::)echo ${DOCKERHUB_ORG}/${docker_image})"
-            echo "::set-env name=CONTINUE::${{ true }}"
+            echo "::set-output name=buildType::$(echo 'alive')"
+            exit 0
           else
             echo "No new images found, running CI only."
             imageList=$(/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/')
             echo ${imageList}
             for i in $(/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/'); do
               python3 tests/imagecheck.py "${DOCKERHUB_ORG}" $(/usr/bin/find ${i}/*/* -printf "%T@ %Tc %p\n" | grep -i "/dockerfile$" | sort -n | tail -n 1 | cut -f9 -d ' ')
+              echo "::set-output name=buildType::$(echo 'dead')"
               done
+              exit 0
           fi
   commit_new_release:
     needs: check_build
+    if: ${{ steps.Check_Build.outputs.buildType == alive }}
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
