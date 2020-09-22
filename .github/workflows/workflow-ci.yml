@@ -26,7 +26,7 @@ jobs:
           compare_range=$(get_compare_range)
           paths=$(changed_paths_in_range "${compare_range}")
           print_changed "${compare_range}" "${paths}"
-          docker_counter=`print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile$" | wc -l`
+          docker_counter=$(print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile$" | wc -l)
           if [ "${docker_counter}" -gt "1" ]; then
             echo -e "ERROR: Currently we only support uploading one Dockerfile at a time, please break these into separate branches."
             exit 1
@@ -34,24 +34,24 @@ jobs:
             echo "New or updated Dockerfile found, building image and running CI"
             #Check to see if the proposed version already exists in master
             git show origin/master:relations.yaml > master_relation.yml
-            docker_file=`print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile$"`
+            docker_file=$(print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile$")
             python3 scripts/check_pre-exist.py master_relation.yml ${docker_file}
             rm master_relation.yml
             build_images "${DOCKERHUB_ORG}" "${paths}"
             python3 tests/imagecheck.py "${DOCKERHUB_ORG}" ${paths}
             git show ${DEPLOY_BRANCH}:relations.yaml > relations.yaml
             python3 scripts/relational.py ${docker_file}
-            image_name=`echo ${docker_file} | rev | cut -f3 -d '/' | rev`
-            image_version=`echo ${docker_file} | rev | cut -f2 -d '/' | rev`
-            docker_image=`echo -e "${image_name}:${image_version}"`
-            echo "::set-env name=DOCKER_IMAGE::`echo ${DOCKERHUB_ORG}/${docker_image}`"
+            image_name=$(echo ${docker_file} | rev | cut -f3 -d '/' | rev)
+            image_version=$(echo ${docker_file} | rev | cut -f2 -d '/' | rev)
+            docker_image=$(echo -e "${image_name}:${image_version}")
+            echo "::set-env name=DOCKER_IMAGE::)echo ${DOCKERHUB_ORG}/${docker_image})"
             echo "::set-env name=CONTINUE::${{ true }}"
           else
             echo "No new images found, running CI only."
-            imageList=`/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/'`
+            imageList=$(/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/')
             echo ${imageList}
-            for i in `/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/'`; do
-              python3 tests/imagecheck.py "${DOCKERHUB_ORG}" `/usr/bin/find ${i}/*/* -printf "%T@ %Tc %p\n" | grep -i "/dockerfile$" | sort -n | tail -n 1 | cut -f9 -d ' '`
+            for i in $(/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/'); do
+              python3 tests/imagecheck.py "${DOCKERHUB_ORG}" $(/usr/bin/find ${i}/*/* -printf "%T@ %Tc %p\n" | grep -i "/dockerfile$" | sort -n | tail -n 1 | cut -f9 -d ' ')
               done
           fi
   commit_new_release:
