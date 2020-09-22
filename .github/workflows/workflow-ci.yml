@@ -48,10 +48,9 @@ jobs:
             echo "::set-env name=CONTINUE::${{ true }}"
           else
             echo "No new images found, running CI only."
-            ls
-            for i in `find * -maxdepth 0 -type d | grep -v "^scripts$\|^tests$"`; do
-              latest_file=`find ${i}/*/* -printf "%T@ %Tc %p\n" | grep -i "/dockerfile$" | sort -n | tail -n 1 | cut -f9 -d ' '`
-              python3 tests/imagecheck.py "${DOCKERHUB_ORG}" "${latest_file}"
+            find -maxdepth 0 -type d | grep -v "^scripts$\|^tests$"
+            for i in `find -maxdepth 0 -type d | grep -v "^scripts$\|^tests$"`; do
+              python3 tests/imagecheck.py "${DOCKERHUB_ORG}" `find ${i}/*/* -printf "%T@ %Tc %p\n" | grep -i "/dockerfile$" | sort -n | tail -n 1 | cut -f9 -d ' '`
               done
           fi
   commit_new_release:
