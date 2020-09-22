@@ -51,7 +51,8 @@ jobs:
             ls
             for i in `find * -maxdepth 0 -type d | grep -v "^scripts$\|^tests$"`; do 
               latest_file=`find ${i}/*/Docker*ile -printf "%T@ %Tc %p\n" | sort -n | tail -n 1 | cut -f9 -d ' '`; 
-              python3 tests/imagecheck.py "bicf" "${latest_file}";
+              echo ${latest_file}
+              python3 tests/imagecheck.py "bicf" ${latest_file};
               done
           fi
   commit_new_release:
@@ -59,7 +60,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-        if: env.CONTINUE == ${{ true }}
+        if: env.CONTINUE == true
         with:
           fetch-depth: 0
       - id: Commit_New_Relations
@@ -71,7 +72,7 @@ jobs:
 
       - id: Push_New_Relations
         uses: ad-m/github-push-action@master
-        if: env.CONTINUE == ${{ true }}
+        if: env.CONTINUE == true
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           branch: "${{ github.ref }}"
@@ -81,7 +82,7 @@ jobs:
     steps:
       - id: DockerHub_Login
         uses: actions-hub/docker/login@master
-        if: env.CONTINUE == ${{ true }}
+        if: env.CONTINUE == true
         env:
           DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
           DOCKER_USERNAME: ${{secrets.BICF_DOCKERHUB_UN}}
