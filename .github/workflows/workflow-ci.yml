@@ -3,9 +3,10 @@ name: Standard Workflow CI
 on: [push]
 
 jobs:
-  check_build:
-    outputs: 
-      CONTINUE: 'dead'
+  check_and_build:
+    outputs:
+      paths: ""
+      recommit: "false"
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
@@ -14,11 +15,9 @@ jobs:
       - name: Check Build
         id: checkBuild
         env:
-          DOCKERHUB_ORG: bicf
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
           LC_ALL: C.UTF-8
           LANG: C.UTF-8
-          CONTINUE: dead
         run: |
           set -e
           source scripts/functions.sh
@@ -32,7 +31,6 @@ jobs:
           docker_counter=$(print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile$" | wc -l)
           if [ "${docker_counter}" -gt "1" ]; then
             echo -e "ERROR: Currently we only support uploading one Dockerfile at a time, please break these into separate branches."
-            echo "::set-output name=CONTINUE::$(echo 'dead')"
             exit 1
           elif [ "${docker_counter}" -eq "1" ]; then
             echo "New or updated Dockerfile found, building image and running CI"
@@ -41,60 +39,87 @@ jobs:
             docker_file=$(print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile$")
             python3 scripts/check_pre-exist.py master_relation.yml ${docker_file}
             rm master_relation.yml
-            build_images "${DOCKERHUB_ORG}" "${paths}"
-            python3 tests/imagecheck.py "${DOCKERHUB_ORG}" ${paths}
-            git show ${DEPLOY_BRANCH}:relations.yaml > relations.yaml
-            python3 scripts/relational.py ${docker_file}
-            image_name=$(echo ${docker_file} | rev | cut -f3 -d '/' | rev)
-            image_version=$(echo ${docker_file} | rev | cut -f2 -d '/' | rev)
-            docker_image=$(echo -e "${image_name}:${image_version}")
-            echo "::set-env name=DOCKER_IMAGE::)echo ${DOCKERHUB_ORG}/${docker_image})"
-            echo "::set-output name=CONTINUE::$(echo 'alive')"
-            exit 0
+            echo "::set-output name=paths::$(echo ${paths})"
           else
             echo "No new images found, running CI only."
-            imageList=$(/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/')
-            echo ${imageList}
-            for i in $(/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/'); do
-              python3 tests/imagecheck.py "${DOCKERHUB_ORG}" $(/usr/bin/find ${i}/*/* -printf "%T@ %Tc %p\n" | grep -i "/dockerfile$" | sort -n | tail -n 1 | cut -f9 -d ' ')
-              echo "::set-output name=CONTINUE::$(echo 'dead')"
-              done
-              exit 0
           fi
+
+      - name: Build Image
+        id: build_image
+        if: steps.checkBuild.paths != ''
+        env:
+          DOCKERHUB_ORG: bicf
+          paths: ${{ steps.checkBuild.outputs.paths}}
+        run: |
+          echo "New or updated Dockerfile found, building image and running CI"
+          build_images "${DOCKERHUB_ORG}" "${paths}"
+
+      - name: Test Image
+        if: steps.checkBuild.paths != ''
+        id: testImage
+        run: |
+          python3 tests/imagecheck.py "${DOCKERHUB_ORG}" ${paths}
+
+      - name: Update relations.yaml
+        if: steps.checkBuild.paths != ''
+        id: updateYaml
+        run: |
+          git show ${DEPLOY_BRANCH}:relations.yaml > relations.yaml
+          python3 scripts/relational.py ${docker_file}
+          image_name=$(echo ${docker_file} | rev | cut -f3 -d '/' | rev)
+          image_version=$(echo ${docker_file} | rev | cut -f2 -d '/' | rev)
+          docker_image=$(echo -e "${image_name}:${image_version}")
+          echo "::set-env name=DOCKER_IMAGE::$(echo ${DOCKERHUB_ORG}/${docker_image})"
+          echo "::set-output name=recommit"::$(echo 'true')"
+
+      - name: CI Only
+        if: steps.checkBuild.paths == ''
+        id: runAllCI
+        run: |
+          imageList=$(/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/')
+          echo ${imageList}
+          for i in $(/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/'); do
+            python3 tests/imagecheck.py "${DOCKERHUB_ORG}" $(/usr/bin/find ${i}/*/* -printf "%T@ %Tc %p\n" | grep -i "/dockerfile$" | sort -n | tail -n 1 | cut -f9 -d ' ')
+            echo "::set-output name=CONTINUE::$(echo 'dead')"
+          done
+
   commit_new_release:
-    needs: check_build
-    if: ${{ steps.checkBuild.CONTINUE == $(echo 'alive') }}
+    needs: check_and_build
+    if: ${{ check_and_build.steps.recommits == 'true' }}
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-        if: env.CONTINUE == true
         with:
           fetch-depth: 0
-      - name: Commit_New_Relations
+
+      - name: Commit New Relations
+        id: commitNewRelations
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add relations.yaml
           git commit --allow-empty -m "Updated relations.yaml"
 
-      - name: Push_New_Relations
+      - name: Push New Relations
+        id: pushNewRelations
         uses: ad-m/github-push-action@master
-        if: env.CONTINUE == true
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           branch: "${{ github.ref }}"
+
   dockerhub_push:
     needs: commit_new_release
     runs-on: ubuntu-18.04
     steps:
       - name: DockerHub_Login
+        id: dockerHubLogin
         uses: actions-hub/docker/login@master
-        if: env.CONTINUE == true
         env:
           DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
           DOCKER_USERNAME: ${{secrets.BICF_DOCKERHUB_UN}}
 
       - name: Push_to_DockerHub
+        id: pushToDockerHub
         uses: actions-hub/docker@master
         if: env.CONTINUE == ${{ true }}
         with:
