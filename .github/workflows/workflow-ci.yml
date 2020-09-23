@@ -77,7 +77,7 @@ jobs:
         id: runAllCI
         run: |
           for i in $(python3 scripts/get_latest_paths.py relations.yaml); do
-            python3 tests/imagecheck.py "${DOCKERHUB_ORG}" ${i}
+            echo "python3 tests/imagecheck.py bicf ${i}"
           done
 
   commit_new_release:
