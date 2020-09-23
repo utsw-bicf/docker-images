@@ -21,5 +21,6 @@ def main():
         relations = load_yaml(os.path.abspath(sys.argv[1]))
         latest_images = relations['latest']
         for image in latest_images:
+            print(image)
             image_path = image + "/" + latest_images[image] + "/unittest.yml"
             print(image_path)
