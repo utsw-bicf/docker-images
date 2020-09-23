@@ -82,3 +82,45 @@ jobs:
             python3 tests/imagecheck.py "${DOCKERHUB_ORG}" $(/usr/bin/find ${i}/*/* -printf "%T@ %Tc %p\n" | grep -i "/dockerfile$" | sort -n | tail -n 1 | cut -f9 -d ' ')
             echo "::set-output name=CONTINUE::$(echo 'dead')"
           done
+
+  commit_new_release:
+    needs: check_and_build
+    if: ${{ needs.check_and_build.outputs.recommits == 'true' }}
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Commit New Relations
+        id: commitNewRelations
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add relations.yaml
+          git commit --allow-empty -m "Updated relations.yaml"
+
+      - name: Push New Relations
+        id: pushNewRelations
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          branch: "${{ github.ref }}"
+
+  dockerhub_push:
+    needs: commit_new_release
+    runs-on: ubuntu-18.04
+    steps:
+      - name: DockerHub_Login
+        id: dockerHubLogin
+        uses: actions-hub/docker/login@master
+        env:
+          DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
+          DOCKER_USERNAME: ${{secrets.BICF_DOCKERHUB_UN}}
+
+      - name: Push_to_DockerHub
+        id: pushToDockerHub
+        uses: actions-hub/docker@master
+        if: env.CONTINUE == ${{ true }}
+        with:
+          args: push ${DOCKER_IMAGE}
