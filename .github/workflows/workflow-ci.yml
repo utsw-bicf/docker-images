@@ -76,12 +76,7 @@ jobs:
         if: steps.checkBuild.paths == ''
         id: runAllCI
         run: |
-          imageList=$(/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/')
-          echo ${imageList}
-          for i in $(/usr/bin/find * -type d -maxdepth 0 | grep -v "^scripts$\|^tests$" | cut -f1 -d '/'); do
-            python3 tests/imagecheck.py "${DOCKERHUB_ORG}" $(/usr/bin/find ${i}/*/* -printf "%T@ %Tc %p\n" | grep -i "/dockerfile$" | sort -n | tail -n 1 | cut -f9 -d ' ')
-            echo "::set-output name=CONTINUE::$(echo 'dead')"
-          done
+          python3 scripts/getLatestPaths.py relations.yaml
 
   commit_new_release:
     needs: check_and_build
