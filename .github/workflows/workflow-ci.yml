@@ -37,7 +37,7 @@ jobs:
             #Check to see if the proposed version already exists in master
             git show origin/master:relations.yaml > master_relation.yml
             docker_file=$(print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile$")
-            python3 scripts/check_pre-exist.py master_relation.yml ${docker_file}
+            python3 scripts/_exist.py master_relation.yml ${docker_file}
             rm master_relation.yml
             echo "::set-output name=paths::$(echo ${paths})"
           else
@@ -76,7 +76,7 @@ jobs:
         if: steps.checkBuild.paths == ''
         id: runAllCI
         run: |
-          python3 scripts/getLatestPaths.py relations.yaml
+          python3 scripts/get_latest_paths.py relations.yaml
 
   commit_new_release:
     needs: check_and_build

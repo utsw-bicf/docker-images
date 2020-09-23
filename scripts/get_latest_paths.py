@@ -7,7 +7,7 @@ import os
 import sys
 import re
 import yaml
-from check_pre-exist import load_yaml
+from check_pre_exist import load_yaml
 
 def main():
     """
