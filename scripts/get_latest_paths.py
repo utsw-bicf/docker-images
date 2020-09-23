@@ -20,8 +20,11 @@ def main():
     else:
         relations = load_yaml(os.path.abspath(sys.argv[1]))
         latest_images = relations['latest']
-        print("Loaded yaml:\n" + latest_images)
+        print("Loaded yaml:\n" + latest_images, file = sys.stderr)
         for image in latest_images:
             print (image, file = sys.stderr)
             image_path = image + "/" + latest_images[image] + "/unittest.yml"
             print(image_path)
+
+if __name__ == "__main__":
+     main()
