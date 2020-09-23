@@ -76,9 +76,9 @@ jobs:
         if: steps.checkBuild.paths == ''
         id: runAllCI
         run: |
-          toTest=`python3 scripts/get_latest_paths.py relations.yaml`
-          python3 tests/imagecheck.py "${DOCKERHUB_ORG}" ${toTest}
-
+          for i in $(python3 scripts/get_latest_paths.py relations.yaml); do
+            python3 tests/imagecheck.py "${DOCKERHUB_ORG}" ${i}
+          done
 
   commit_new_release:
     needs: check_and_build
