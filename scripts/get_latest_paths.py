@@ -9,10 +9,11 @@ import re
 import yaml
 from check_pre_exist import load_yaml
 
+
 def main():
     """
     Main method
-    
+
     """
     if len(sys.argv) < 1:
         print("Usage python3 scripts/getLatestPaths.py <relations.yaml path>")
@@ -21,9 +22,10 @@ def main():
         relations = load_yaml(os.path.abspath(sys.argv[1]))
         latest_images = relations['latest']
         for image in latest_images:
-            print (image, file = sys.stderr)
+            print(image, file=sys.stderr)
             image_path = image + "/" + latest_images[image] + "/unittest.yml"
             print(image_path)
 
+
 if __name__ == "__main__":
-     main()
+    main()
