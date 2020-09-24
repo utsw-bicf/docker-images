@@ -30,7 +30,7 @@ def main():
             imagename = "{}/{}:{}".format(owner, image, tag).replace("+", "_")
             image_path = os.path.abspath(image + "/" + tag + "/unittest.yml")
             os.system("docker pull " + imagename)
-            os.system("tests/test_dockerfiles.py \"" +
+            os.system("python3 tests/test_dockerfiles.py \"" +
                       owner + "\" \"" + image_path + "\"")
 
 
