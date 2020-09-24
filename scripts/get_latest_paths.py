@@ -27,13 +27,15 @@ def main():
         print(test_path, file=sys.stderr)
         for image in latest_images:
             tag = latest_images[image]
-            imagename = "{}/{}:{}".format(owner, image, tag).replace("+", "_")
+            image_name = "{}/{}:{}".format(owner, image, tag).replace("+", "_")
             image_path = os.path.abspath(image + "/" + tag + "/unittest.yml")
-            os.system("docker pull " + imagename)
-            os.system("python3  tests/test_dockerfiles.py \"" +
-                      owner + "\" \"" + image_path + "\"")
+            if os.system("docker pull " + image_name) != 0:
+                print("ERROR: Unable to build " + image_name)
+                sys.exit(1)
+            if os.system("python3 tests/test_dockerfiles.py \"" +
+                      owner + "\" \"" + image_path + "\"") != 0:
+                print ("ERROR: Image testing failed for " + image_name)
 
 
 if __name__ == "__main__":
     main()
-    
