@@ -48,11 +48,10 @@ def main():
             image_name = "{}/{}:{}".format(owner, image, tag).replace("+", "_")
             pull_image(image_name)
             image_path = image + "/" + tag + "/unittest.yml"
-            print(os.system("python3 tests/imagecheck.py \"" + owner + "\" " + image_path))
-            """
+            print("Exit status: " + os.system("python3 tests/imagecheck.py \"" + owner + "\" " + image_path))
             if os.system("python3 tests/imagecheck.py \"" + owner + "\" " + image_path) != 0:
                 print("ERROR: Image testing failed for " + image_name)
-            """
+                sys.exit(1)
 
 
 if __name__ == "__main__":
