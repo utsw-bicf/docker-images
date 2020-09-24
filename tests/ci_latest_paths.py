@@ -7,7 +7,6 @@ import os
 import sys
 import re
 import yaml
-import imagecheck
 
 
 def load_yaml(master_yaml):
@@ -49,7 +48,8 @@ def main():
             image_name = "{}/{}:{}".format(owner, image, tag).replace("+", "_")
             pull_image(image_name)
             image_path = os.path.abspath(image + "/" + tag + "/unittest.yml")
-            imagecheck.main(owner, image_path)
+            if os.system("python3 tests/imagecheck.py \"" + owner + "\" \"" + image_path + "\"") != 0:
+                print("ERROR: Image testing failed for " + image_name)
 
 
 if __name__ == "__main__":
