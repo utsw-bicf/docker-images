@@ -7,7 +7,6 @@ import os
 import sys
 import re
 import yaml
-import subprocess
 from check_pre_exist import load_yaml
 
 
@@ -30,9 +29,9 @@ def main():
             tag = latest_images[image]
             imagename = "{}/{}:{}".format(owner, image, tag).replace("+", "_")
             image_path = os.path.abspath(image + "/" + tag + "/unittest.yml")
-            subprocess.call("docker pull " + imagename)
-            subprocess.call("tests/test_dockerfiles.py \"" +
-                            owner + "\" \"" + image_path + "\"")
+            os.system("docker pull " + imagename)
+            os.system("tests/test_dockerfiles.py \"" +
+                      owner + "\" \"" + image_path + "\"")
 
 
 if __name__ == "__main__":
