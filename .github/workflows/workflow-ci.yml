@@ -16,7 +16,6 @@ jobs:
         id: checkBuild
         env:
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
-          DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           LC_ALL: C.UTF-8
           LANG: C.UTF-8
         run: |
@@ -49,7 +48,7 @@ jobs:
         id: build_image
         if: steps.checkBuild.paths != ''
         env:
-          DOCKERHUB_ORG: bicf
+          DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           paths: ${{ steps.checkBuild.outputs.paths}}
         run: |
           echo "New or updated Dockerfile found, building image and running CI"
@@ -64,6 +63,8 @@ jobs:
       - name: Update relations.yaml
         if: steps.checkBuild.paths != ''
         id: updateYaml
+        env:
+          DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
           git show ${DEPLOY_BRANCH}:relations.yaml > relations.yaml
           python3 scripts/relational.py ${docker_file}
@@ -76,6 +77,8 @@ jobs:
       - name: CI Only
         if: steps.checkBuild.paths == ''
         id: runAllCI
+        env:
+          DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
           python3 scripts/get_latest_paths.py ${DOCKERHUB_ORG} relations.yaml
 
