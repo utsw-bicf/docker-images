@@ -37,7 +37,7 @@ jobs:
             #Check to see if the proposed version already exists in master
             git show origin/master:relations.yaml > master_relation.yml
             docker_file=$(print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile$")
-            python3 scripts/_exist.py master_relation.yml ${docker_file}
+            python3 scripts/check_pre_exist.py master_relation.yml ${docker_file}
             rm master_relation.yml
             echo "::set-output name=paths::$(echo ${paths})"
           else
@@ -80,7 +80,6 @@ jobs:
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
-          pip3 install -U pytest
           python3 tests/ci_latest_paths.py "${DOCKERHUB_ORG}" relations.yaml
 
   commit_new_release:
