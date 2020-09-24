@@ -30,9 +30,9 @@ def main():
             tag = latest_images[image]
             imagename = "{}/{}:{}".format(owner, image, tag).replace("+", "_")
             image_path = os.path.abspath(image + "/" + tag + "/unittest.yml")
-            os.system("docker pull " + imagename)
-            subprocess.call("tests/")
-            print(image_path)
+            subprocess.call("docker pull " + imagename)
+            subprocess.call("tests/test_dockerfiles.py \"" +
+                            owner + "\" \"" + image_path + "\"")
 
 
 if __name__ == "__main__":
