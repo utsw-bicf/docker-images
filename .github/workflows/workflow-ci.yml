@@ -16,6 +16,7 @@ jobs:
         id: checkBuild
         env:
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
+          DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           LC_ALL: C.UTF-8
           LANG: C.UTF-8
         run: |
