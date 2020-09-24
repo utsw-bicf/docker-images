@@ -7,6 +7,7 @@ import os
 import sys
 import re
 import yaml
+import subprocess
 from check_pre_exist import load_yaml
 
 
@@ -16,14 +17,21 @@ def main():
 
     """
     if len(sys.argv) < 1:
-        print("Usage python3 scripts/getLatestPaths.py <relations.yaml path>")
+        print(
+            "Usage python3 scripts/getLatestPaths.py <docker_owner> <relations.yaml path>")
         sys.exit(1)
     else:
-        relations = load_yaml(os.path.abspath(sys.argv[1]))
+        owner = sys.argv[1]
+        relations = load_yaml(os.path.abspath(sys.argv[2]))
         latest_images = relations['latest']
+        test_path = os.getcwd()
+        print(test_path, file=sys.stderr)
         for image in latest_images:
-            image_path = os.path.abspath(
-                image + "/" + latest_images[image] + "/unittest.yml")
+            tag = latest_images[image]
+            imagename = "{}/{}:{}".format(owner, image, tag).replace("+", "_")
+            image_path = os.path.abspath(image + "/" + tag + "/unittest.yml")
+            os.system("docker pull " + imagename)
+            subprocess.call("tests/")
             print(image_path)
 
 
