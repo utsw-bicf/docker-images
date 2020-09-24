@@ -80,6 +80,7 @@ jobs:
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
+          pip3 install -U pytest
           python3 scripts/get_latest_paths.py "${DOCKERHUB_ORG}" relations.yaml
 
   commit_new_release:
