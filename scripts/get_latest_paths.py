@@ -32,9 +32,8 @@ def main():
             if os.system("docker pull " + image_name) != 0:
                 print("ERROR: Unable to build " + image_name)
                 sys.exit(1)
-            if os.system("python3 tests/test_dockerfiles.py \"" +
-                      owner + "\" \"" + image_path + "\"") != 0:
-                print ("ERROR: Image testing failed for " + image_name)
+            if os.system("python3 tests/test_dockerfiles.py \"" + owner + "\" \"" + image_path + "\"") != 0:
+                print("ERROR: Image testing failed for " + image_name)
 
 
 if __name__ == "__main__":
