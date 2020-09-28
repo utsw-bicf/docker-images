@@ -45,7 +45,6 @@ jobs:
           else
             echo "No new images found, running CI only."
           fi
-          echo "${{ steps.checkBuild.build }}"
 
       - name: Build Image
         id: build_image
