@@ -74,7 +74,7 @@ jobs:
           image_version=$(echo ${docker_file} | rev | cut -f2 -d '/' | rev)
           docker_image=$(echo -e "${image_name}:${image_version}")
           echo "::set-env name=DOCKER_IMAGE::$(echo ${DOCKERHUB_ORG}/${docker_image})"
-          echo "::set-output name=recommit"::$(echo 'true')"
+          echo "::set-output name=recommit"::'true'"
 
       - name: CI Only
         if: steps.checkBuild.build == 'false'
