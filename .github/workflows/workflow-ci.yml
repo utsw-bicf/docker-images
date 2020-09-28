@@ -45,11 +45,11 @@ jobs:
           else
             echo "No new images found, running CI only."
           fi
-          echo ${{ steps.checkBuild.paths }}
+          echo ${{ steps.checkBuild.build }}
 
       - name: Build Image
         id: build_image
-        if: steps.checkBuild.build == 'true'
+        if: ${{ steps.checkBuild.build }} == 'true'
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           paths: ${{ steps.checkBuild.paths }}
@@ -58,13 +58,13 @@ jobs:
           build_images "${DOCKERHUB_ORG}" "${paths}"
 
       - name: Test Image
-        if: steps.checkBuild.build == 'true'
+        if: ${{ steps.checkBuild.build }} == 'true'
         id: testImage
         run: |
           python3 tests/imagecheck.py "${DOCKERHUB_ORG}" ${paths}
 
       - name: Update relations.yaml
-        if: steps.checkBuild.build == 'true'
+        if: ${{ steps.checkBuild.build }} == 'true'
         id: updateYaml
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
@@ -78,7 +78,7 @@ jobs:
           echo "::set-output name=recommit"::'true'"
 
       - name: CI Only
-        if: steps.checkBuild.build == 'false'
+        if: ${{ steps.checkBuild.build }} == 'false'
         id: runAllCI
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
@@ -87,7 +87,7 @@ jobs:
 
   commit_new_release:
     needs: check_and_build
-    if: ${{ needs.check_and_build.outputs.recommits == 'true' }}
+    if: ${{ steps.updateYaml.recommits == 'true' }}
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
