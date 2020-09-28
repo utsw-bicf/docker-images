@@ -45,14 +45,14 @@ jobs:
           else
             echo "No new images found, running CI only."
           fi
-          echo "${{ steps.checkBuild.paths }}"
+          echo ${{ steps.checkBuild.paths }}
 
       - name: Build Image
         id: build_image
         if: steps.checkBuild.build == 'true'
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
-          paths: ${{ steps.checkBuild.outputs.paths }}
+          paths: ${{ steps.checkBuild.paths }}
         run: |
           echo "New or updated Dockerfile found, building image and running CI"
           build_images "${DOCKERHUB_ORG}" "${paths}"
