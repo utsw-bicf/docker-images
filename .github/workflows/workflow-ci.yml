@@ -98,8 +98,10 @@ jobs:
           echo "::set-output name=recommit::'true'"
 
       - name: CI Only
-        if: ${{ steps.checkBuild.outputs.build }} == 'false'
         id: runAllCI
+        if: |
+          ${{ steps.checkBuild.outputs.build }} != 'true'
+          ${{ steps.checkBuild.outputs.docker_file }} == ''
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
