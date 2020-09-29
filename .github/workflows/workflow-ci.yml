@@ -88,11 +88,18 @@ jobs:
           image_version=$(echo ${docker_file} | rev | cut -f2 -d '/' | rev)
           docker_image=$(echo -e "${image_name}:${image_version}")
           echo "::set-env name=DOCKER_IMAGE::$(echo ${DOCKERHUB_ORG}/${docker_image})"
-          echo "::set-output name=recommit::${{ true }}"
+          echo "::set-output name=recommit::'true'"
 
-      - name: CI Only
+  ci_only:
+    needs: check_and_build
+    if: ${{ needs.check_and_build.recommits }} == 'false'
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Run Latest CI
         id: runAllCI
-        if: ${{ steps.checkBuild.outputs.build != 'false' }} && ${{ steps.checkBuild.outputs.docker_file == 'null' }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
@@ -100,7 +107,7 @@ jobs:
 
   commit_new_release:
     needs: check_and_build
-    if: ${{ needs.check_and_build.recommits }} == ${{ true }}
+    if: ${{ needs.check_and_build.recommits }} == 'true'
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
