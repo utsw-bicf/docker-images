@@ -51,9 +51,7 @@ jobs:
 
       - name: Build Image
         id: build_image
-        if: |
-          ${{ steps.checkBuild.outputs.build }} == ${{ true }}
-          ${{ steps.checkBuild.outputs.paths }} != ${{ null }}
+        if: ${{ steps.checkBuild.outputs.build }} == ${{ true }} && ${{ steps.checkBuild.outputs.paths }} != ${{ null }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           paths: ${{ steps.checkBuild.outputs.paths }}
@@ -66,9 +64,7 @@ jobs:
 
       - name: Test Image
         id: testImage
-        if: |
-          ${{ steps.checkBuild.outputs.build }} == ${{ true }}
-          ${{ steps.checkBuild.outputs.paths }} != ${{ null }}
+        if: ${{ steps.checkBuild.outputs.build }} == ${{ true }} && ${{ steps.checkBuild.outputs.paths }} != ${{ null }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           paths: ${{ steps.checkBuild.outputs.paths }}
@@ -77,10 +73,7 @@ jobs:
 
       - name: Update relations.yaml
         id: updateYaml
-        if: |
-          ${{ steps.checkBuild.outputs.build }} == ${{ true }}
-          ${{ steps.checkBuild.outputs.paths }} != ${{ null }}
-          ${{ steps.checkBuild.outputs.docker_file}} != ${{ null }}
+        if: ${{ steps.checkBuild.outputs.build }} == ${{ true }} && ${{ steps.checkBuild.outputs.paths }} != ${{ null }} && ${{ steps.checkBuild.outputs.docker_file}} != ${{ null }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
@@ -99,9 +92,7 @@ jobs:
 
       - name: CI Only
         id: runAllCI
-        if: |
-          ${{ steps.checkBuild.outputs.build }} == ${{ false }}
-          ${{ steps.checkBuild.outputs.docker_file }} == ${{ null }}
+        if: ${{ steps.checkBuild.outputs.build }} == ${{ false }} && ${{ steps.checkBuild.outputs.docker_file }} == ${{ null }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
