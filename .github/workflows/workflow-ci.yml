@@ -92,8 +92,10 @@ jobs:
         id: runAllCI
         if: steps.check_and_build.outputs.build == ${{ false }} && steps.checkBuild.outputs.docker_file == ${{ null }}
         env:
+          test: ${{ steps.check_and_build.outputs.build }}
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
+          echo ${test}
           python3 tests/ci_latest_paths.py "${DOCKERHUB_ORG}" relations.yaml
 
       - name: Commit New Relations
