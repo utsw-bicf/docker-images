@@ -73,7 +73,7 @@ jobs:
 
       - name: Update relations.yaml
         id: updateYaml
-        if: ${{ steps.checkBuild.outputs.build }} == ${{ true }} && ${{ steps.checkBuild.outputs.paths }} != ${{ null }} && ${{ steps.checkBuild.outputs.docker_file}} != ${{ null }}
+        if: ${{ steps.checkBuild.outputs.build }} == 'true' && ${{ steps.checkBuild.outputs.paths }} != ${{ null }} && ${{ steps.checkBuild.outputs.docker_file}} != ${{ null }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
@@ -92,7 +92,7 @@ jobs:
 
       - name: CI Only
         id: runAllCI
-        if: ${{ steps.checkBuild.outputs.build }} == ${{ false }} && ${{ steps.checkBuild.outputs.docker_file }} == ${{ null }}
+        if: ${{ steps.checkBuild.outputs.build  == 'false' }} && ${{ steps.checkBuild.outputs.docker_file == '' }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
