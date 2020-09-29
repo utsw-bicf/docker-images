@@ -90,12 +90,12 @@ jobs:
 
   ci_only:
     needs: check_and_build
-    if: ${{ needs.check_and_build.outputs.build == 'false' }}
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          if: needs.check_and_build.outputs.build == 'false'
       - name: Run Latest CI
         id: runAllCI
         env:
@@ -105,13 +105,12 @@ jobs:
 
   commit_new_release:
     needs: check_and_build
-    if: ${{ needs.check_and_build.outputs.build == 'true' }}
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
+        if: needs.check_and_build.outputs.build == 'true'
       - name: Commit New Relations
         id: commitNewRelations
         run: |
