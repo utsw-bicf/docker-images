@@ -47,6 +47,8 @@ jobs:
             echo "::set-output name=build::$(echo ${build})"
           else
             echo "No new images found, running CI only."
+            build="false"
+            echo "::set-output name=build::$(echo ${build})"
           fi
 
       - name: Build Image
@@ -100,7 +102,7 @@ jobs:
       - name: CI Only
         id: runAllCI
         if: |
-          ${{ steps.checkBuild.outputs.build }} != 'true'
+          ${{ steps.checkBuild.outputs.build }} == 'false'
           ${{ steps.checkBuild.outputs.docker_file }} == ''
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
