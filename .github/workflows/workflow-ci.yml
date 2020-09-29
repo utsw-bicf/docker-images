@@ -61,6 +61,7 @@ jobs:
           set -e
           source scripts/functions.sh
           echo "New or updated Dockerfile found, building image and running CI"
+          echo ${paths}
           build_images "${DOCKERHUB_ORG}" "${paths}"
 
       - name: Test Image
