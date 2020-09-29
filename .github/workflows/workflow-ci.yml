@@ -5,10 +5,10 @@ on: [push]
 jobs:
   check_and_build:
     outputs:
-      paths: ""
-      build: ""
-      recommit: ""
-      docker_file: ""
+      paths: ${{ null }}
+      build: ${{ false }}
+      recommit: ${{ false }}
+      docker_file: ${{ null }}
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
@@ -43,19 +43,17 @@ jobs:
             echo "::set-output name=docker_file::$(echo ${docker_file})"
             python3 scripts/check_pre_exist.py master_relation.yml ${docker_file}
             rm master_relation.yml
-            build="true"
-            echo "::set-output name=build::$(echo ${build})"
+            echo "::set-output name=build::${{ true }})"
           else
             echo "No new images found, running CI only."
-            build="false"
-            echo "::set-output name=build::$(echo ${build})"
+            echo "::set-output name=build::${{ false }}""
           fi
 
       - name: Build Image
         id: build_image
         if: |
-          ${{ steps.checkBuild.outputs.build }} == 'true'
-          ${{ steps.checkBuild.outputs.paths }} != ''
+          ${{ steps.checkBuild.outputs.build }} == ${{ true }}
+          ${{ steps.checkBuild.outputs.paths }} != ${{ null }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           paths: ${{ steps.checkBuild.outputs.paths }}
@@ -69,8 +67,8 @@ jobs:
       - name: Test Image
         id: testImage
         if: |
-          ${{ steps.checkBuild.outputs.build }} == 'true'
-          ${{ steps.checkBuild.outputs.paths }} != ''
+          ${{ steps.checkBuild.outputs.build }} == ${{ true }}
+          ${{ steps.checkBuild.outputs.paths }} != ${{ null }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           paths: ${{ steps.checkBuild.outputs.paths }}
@@ -80,9 +78,9 @@ jobs:
       - name: Update relations.yaml
         id: updateYaml
         if: |
-          ${{ steps.checkBuild.outputs.build }} == 'true'
-          ${{ steps.checkBuild.outputs.paths }} != ''
-          ${{ steps.checkBuild.outputs.docker_file}} != ''
+          ${{ steps.checkBuild.outputs.build }} == ${{ true }}
+          ${{ steps.checkBuild.outputs.paths }} != ${{ null }}
+          ${{ steps.checkBuild.outputs.docker_file}} != ${{ null }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
@@ -97,13 +95,13 @@ jobs:
           image_version=$(echo ${docker_file} | rev | cut -f2 -d '/' | rev)
           docker_image=$(echo -e "${image_name}:${image_version}")
           echo "::set-env name=DOCKER_IMAGE::$(echo ${DOCKERHUB_ORG}/${docker_image})"
-          echo "::set-output name=recommit::'true'"
+          echo "::set-output name=recommit::${{ true }}"
 
       - name: CI Only
         id: runAllCI
         if: |
-          ${{ steps.checkBuild.outputs.build }} == 'false'
-          ${{ steps.checkBuild.outputs.docker_file }} == ''
+          ${{ steps.checkBuild.outputs.build }} == ${{ false }}
+          ${{ steps.checkBuild.outputs.docker_file }} == ${{ null }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
@@ -111,7 +109,7 @@ jobs:
 
   commit_new_release:
     needs: check_and_build
-    if: ${{ needs.check_and_build.recommits == 'true' }}
+    if: ${{ needs.check_and_build.recommits == ${{ true }} }}
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
@@ -147,6 +145,5 @@ jobs:
       - name: Push_to_DockerHub
         id: pushToDockerHub
         uses: actions-hub/docker@master
-        if: env.CONTINUE == ${{ true }}
         with:
           args: push ${DOCKER_IMAGE}
