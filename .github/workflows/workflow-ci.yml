@@ -6,8 +6,8 @@ jobs:
   check_and_build:
     outputs:
       paths: ""
-      build: "false"
-      recommit: "false"
+      build: ""
+      recommit: ""
       docker_file: ""
     runs-on: ubuntu-18.04
     steps:
