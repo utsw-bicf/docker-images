@@ -8,6 +8,7 @@ jobs:
       paths: ""
       build: "false"
       recommit: "false"
+      docker_file: ""
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
@@ -35,18 +36,15 @@ jobs:
             exit 1
           elif [ "${docker_counter}" -eq "1" ]; then
             echo "New or updated Dockerfile found, building image and running CI"
-            echo "Setting paths"
             echo "::set-output name=paths::$(echo ${paths})"
-            echo "Paths set"
             #Check to see if the proposed version already exists in master
             git show origin/master:relations.yaml > master_relation.yml
             docker_file=$(print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile$")
+            echo "::set-output name=docker_file::$(echo ${docker_file})"
             python3 scripts/check_pre_exist.py master_relation.yml ${docker_file}
             rm master_relation.yml
             build="true"
-            echo "Flipping build"
             echo "::set-output name=build::$(echo ${build})"
-            echo "Build flipped"
           else
             echo "No new images found, running CI only."
           fi
@@ -82,11 +80,15 @@ jobs:
         if: |
           ${{ steps.checkBuild.outputs.build }} == 'true'
           ${{ steps.checkBuild.outputs.paths }} != ''
+          ${{ steps.checkBuild.outputs.docker_file}} != ''
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
           paths: ${{ steps.checkBuild.outputs.paths }}
+          docker_file: ${{ steps.checkBuild.outputs.docker_file }}
         run: |
+          set -e
+          source scripts/functions.sh
           git show ${DEPLOY_BRANCH}:relations.yaml > relations.yaml
           python3 scripts/relational.py ${docker_file}
           image_name=$(echo ${docker_file} | rev | cut -f3 -d '/' | rev)
