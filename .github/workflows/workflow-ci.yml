@@ -50,7 +50,7 @@ jobs:
 
       - name: Build Image
         id: build_image
-        if: ${{ steps.checkBuild.outputs.build == 'true' }} && ${{ steps.checkBuild.outputs.paths != 'null' }}
+        if: steps.checkBuild.outputs.build == 'true' && steps.checkBuild.outputs.paths != 'null'
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           paths: ${{ steps.checkBuild.outputs.paths }}
@@ -63,7 +63,7 @@ jobs:
 
       - name: Test Image
         id: testImage
-        if: ${{ steps.checkBuild.outputs.build == 'true' }} && ${{ steps.checkBuild.outputs.paths != 'null' }}
+        if: steps.checkBuild.outputs.build == 'true' && steps.checkBuild.outputs.paths != 'null'
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           paths: ${{ steps.checkBuild.outputs.paths }}
@@ -72,7 +72,7 @@ jobs:
 
       - name: Update relations.yaml
         id: updateYaml
-        if: ${{ steps.checkBuild.outputs.build == 'true' }} && ${{ steps.checkBuild.outputs.paths != 'null' }}  && ${{ steps.checkBuild.outputs.docker_file != 'null' }}
+        if: steps.checkBuild.outputs.build == 'true' && steps.checkBuild.outputs.paths != 'null' && steps.checkBuild.outputs.docker_file != 'null'
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
@@ -87,32 +87,18 @@ jobs:
           image_version=$(echo ${docker_file} | rev | cut -f2 -d '/' | rev)
           docker_image=$(echo -e "${image_name}:${image_version}")
           echo "::set-env name=DOCKER_IMAGE::$(echo ${DOCKERHUB_ORG}/${docker_image})"
-
-  ci_only:
-    needs: check_and_build
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          if: needs.check_and_build.outputs.build == 'false'
-      - name: Run Latest CI
+      
+      - name: CI Only
         id: runAllCI
+        if: steps.check_and_build.outputs.build == 'false'
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
           python3 tests/ci_latest_paths.py "${DOCKERHUB_ORG}" relations.yaml
 
-  commit_new_release:
-    needs: check_and_build
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-        if: needs.check_and_build.outputs.build == 'true'
       - name: Commit New Relations
         id: commitNewRelations
+        if: steps.checkBuild.outputs.build == 'true' && steps.checkBuild.outputs.paths != 'null' && steps.checkBuild.outputs.docker_file != 'null'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -121,17 +107,15 @@ jobs:
 
       - name: Push New Relations
         id: pushNewRelations
+        if: steps.checkBuild.outputs.build == 'true' && steps.checkBuild.outputs.paths != 'null' && steps.checkBuild.outputs.docker_file != 'null'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           branch: "${{ github.ref }}"
 
-  dockerhub_push:
-    needs: commit_new_release
-    runs-on: ubuntu-18.04
-    steps:
       - name: DockerHub_Login
         id: dockerHubLogin
+        if: steps.checkBuild.outputs.build == 'true' && steps.checkBuild.outputs.paths != 'null' && steps.checkBuild.outputs.docker_file != 'null'
         uses: actions-hub/docker/login@master
         env:
           DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
@@ -139,6 +123,7 @@ jobs:
 
       - name: Push_to_DockerHub
         id: pushToDockerHub
+        if: steps.checkBuild.outputs.build == 'true' && steps.checkBuild.outputs.paths != 'null' && steps.checkBuild.outputs.docker_file != 'null'
         uses: actions-hub/docker@master
         with:
           args: push ${DOCKER_IMAGE}
