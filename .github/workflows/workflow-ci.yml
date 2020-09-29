@@ -58,6 +58,8 @@ jobs:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           paths: ${{ steps.checkBuild.paths }}
         run: |
+          set -e
+          source scripts/functions.sh
           echo "New or updated Dockerfile found, building image and running CI"
           build_images "${DOCKERHUB_ORG}" "${paths}"
 
