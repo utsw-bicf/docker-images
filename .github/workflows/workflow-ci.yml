@@ -53,10 +53,12 @@ jobs:
 
       - name: Build Image
         id: build_image
-        if: ${{ steps.checkBuild.outputs.build }} == 'true'
+        if: |
+          ${{ steps.checkBuild.outputs.build }} == 'true'
+          ${{ steps.checkBuild.outputs.paths }} != ''
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
-          paths: ${{ steps.checkBuild.outputs.path }}
+          paths: ${{ steps.checkBuild.outputs.paths }}
         run: |
           set -e
           source scripts/functions.sh
