@@ -68,7 +68,6 @@ jobs:
       - name: Update relations.yaml
         id: updateYaml
         if: ${BUILD} == 'true'
-        env:
         run: |
           set -e
           source scripts/functions.sh
@@ -100,7 +99,7 @@ jobs:
         id: dockerHubLogin
         if: ${BUILD} == 'true'
         uses: actions-hub/docker/login@master
-        
+
       - name: Push_to_DockerHub
         id: pushToDockerHub
         if: ${BUILD} == 'true'
