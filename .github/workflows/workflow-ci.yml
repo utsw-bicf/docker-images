@@ -123,10 +123,9 @@ jobs:
 
       - name: CI Only
         id: runAllCI
-        if: ${{ steps.checkBuild.outputs.build }} == 'false' 
+        if: ${{ steps.checkBuild.outputs.build == 'false' }}
         env:
           test: ${{ steps.checkBuild.outputs.build }}
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
-          echo ${test}
           python3 tests/ci_latest_paths.py "${DOCKERHUB_ORG}" relations.yaml
