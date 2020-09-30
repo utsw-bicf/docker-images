@@ -96,6 +96,7 @@ jobs:
           git config user.email github-actions@github.com
           git add relations.yaml
           git commit --allow-empty -m "Updated relations.yaml"
+          echo ${{ steps.checkBuild.outputs.build }}
 
       - name: Push New Relations
         id: pushNewRelations
@@ -122,7 +123,7 @@ jobs:
 
       - name: CI Only
         id: runAllCI
-        if: ${{ steps.checkBuild.outputs.build }} != 'true' 
+        if: ${{ steps.checkBuild.outputs.build }} == 'false' 
         env:
           test: ${{ steps.check_and_build.build }}
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
