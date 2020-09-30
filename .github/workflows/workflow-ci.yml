@@ -125,7 +125,7 @@ jobs:
         id: runAllCI
         if: ${{ steps.checkBuild.outputs.build }} == 'false' 
         env:
-          test: ${{ steps.check_and_build.build }}
+          test: ${{ steps.checkBuild.build }}
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
           echo ${test}
