@@ -42,7 +42,7 @@ jobs:
             echo "::set-output name=docker_file::$(echo ${docker_file})"
             python3 scripts/check_pre_exist.py master_relation.yml ${docker_file}
             rm master_relation.yml
-            echo "::set-output name=build::'true')"
+            echo "::set-output name=build::'true'"
           else
             echo "No new images found, running CI only."
             echo "::set-output name=build::'false'"
