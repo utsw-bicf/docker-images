@@ -4,21 +4,22 @@ on: [push]
 
 jobs:
   check_and_build:
-    outputs:
-      paths: ${{ null }}
-      build: ${{ false }}
-      docker_file: ${{ null }}
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Check Build
-        id: checkBuild
-        env:
+          BUILD: ${{ false }}
+          PATHS: ""
+          DOCKER_FILE: ""
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
+          DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
+          DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
+          DOCKER_USERNAME: ${{secrets.BICF_DOCKERHUB_UN}}
           LC_ALL: C.UTF-8
           LANG: C.UTF-8
+      - name: Check Build
+        id: checkBuild
         run: |
           set -e
           source scripts/functions.sh
@@ -51,8 +52,6 @@ jobs:
       - name: Build Image
         id: build_image
         if: ${BUILD} == 'true'
-        env:
-          DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
           set -e
           source scripts/functions.sh
@@ -63,8 +62,6 @@ jobs:
       - name: Test Image
         id: testImage
         if: ${BUILD} == 'true'
-        env:
-          DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
           python3 tests/imagecheck.py "${DOCKERHUB_ORG}" ${PATHS}
 
@@ -72,8 +69,6 @@ jobs:
         id: updateYaml
         if: ${BUILD} == 'true'
         env:
-          DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
-          DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
         run: |
           set -e
           source scripts/functions.sh
@@ -105,10 +100,7 @@ jobs:
         id: dockerHubLogin
         if: ${BUILD} == 'true'
         uses: actions-hub/docker/login@master
-        env:
-          DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
-          DOCKER_USERNAME: ${{secrets.BICF_DOCKERHUB_UN}}
-
+        
       - name: Push_to_DockerHub
         id: pushToDockerHub
         if: ${BUILD} == 'true'
@@ -119,9 +111,6 @@ jobs:
       - name: CI Only
         id: runAllCI
         if: ${BUILD} == 'false'
-        env:
-          test: ${{ steps.check_and_build.build }}
-          DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
           echo ${test}
           python3 tests/ci_latest_paths.py "${DOCKERHUB_ORG}" relations.yaml
