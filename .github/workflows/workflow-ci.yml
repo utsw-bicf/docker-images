@@ -50,7 +50,7 @@ jobs:
 
       - name: Build Image
         id: build_image
-        if: ${{ steps.checkBuild.outputs.build }}
+        if: ${{ steps.checkBuild.outputs.build == 'true' }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           paths: ${{ steps.checkBuild.outputs.paths }}
@@ -63,7 +63,7 @@ jobs:
 
       - name: Test Image
         id: testImage
-        if: ${{ steps.checkBuild.outputs.build }}
+        if: ${{ steps.checkBuild.outputs.build == 'true' }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           paths: ${{ steps.checkBuild.outputs.paths }}
@@ -72,7 +72,7 @@ jobs:
 
       - name: Update relations.yaml
         id: updateYaml
-        if: ${{ steps.checkBuild.outputs.build }}
+        if: ${{ steps.checkBuild.outputs.build == 'true' }}
         env:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
@@ -90,17 +90,17 @@ jobs:
 
       - name: Commit New Relations
         id: commitNewRelations
-        if: ${{ steps.checkBuild.outputs.build }}
+        if: ${{ steps.checkBuild.outputs.build == 'true' }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add relations.yaml
           git commit --allow-empty -m "Updated relations.yaml"
-          echo ${{ steps.checkBuild.outputs.build }}
+          echo ${{ steps.checkBuild.outputs.build == 'true' }}
 
       - name: Push New Relations
         id: pushNewRelations
-        if: ${{ steps.checkBuild.outputs.build }}
+        if: ${{ steps.checkBuild.outputs.build == 'true' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
@@ -108,7 +108,7 @@ jobs:
 
       - name: DockerHub_Login
         id: dockerHubLogin
-        if: ${{ steps.checkBuild.outputs.build }}
+        if: ${{ steps.checkBuild.outputs.build == 'true' }}
         uses: actions-hub/docker/login@master
         env:
           DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
@@ -116,7 +116,7 @@ jobs:
 
       - name: Push_to_DockerHub
         id: pushToDockerHub
-        if: ${{ steps.checkBuild.outputs.build }}
+        if: ${{ steps.checkBuild.outputs.build == 'true' }}
         uses: actions-hub/docker@master
         with:
           args: push ${DOCKER_IMAGE}
@@ -125,7 +125,7 @@ jobs:
         id: runAllCI
         if: ${{ steps.checkBuild.outputs.build == 'false' }}
         env:
-          test: ${{ steps.checkBuild.outputs.build }}
+          test: ${{ steps.checkBuild.outputs.build == 'true' }}
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
           python3 tests/ci_latest_paths.py "${DOCKERHUB_ORG}" relations.yaml
