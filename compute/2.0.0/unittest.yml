@@ -9,9 +9,9 @@ commands:
     expect_text: "multiqc, version 1.9"
   - cmd: '-c "az --version | head -n 4"'
     expect_text: |
-                azure-cli                         2.11.1 \*
-    
-                core                              2.11.1 \*
-                telemetry                          1.0.6
+      azure-cli                         2.11.1 \*
+
+      core                              2.11.1 \*
+      telemetry                          1.0.6
   - cmd: '-c "ls -l /opt/azureblobworker.sh"'
     expect_text: "-rwxr-xr-x 1 root root.*/opt/azureblobworker.sh"

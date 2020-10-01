@@ -4,28 +4,27 @@ function current_branch_name() {
   echo ${GITHUB_REF##*/}
 }
 
-function fetch_develop()
-{
-    # Keep track of which branch we are on.
-    # We are on a detached head, and we need to be able to go back to it.
-    local build_head=$(git rev-parse HEAD)
+function fetch_develop() {
+  # Keep track of which branch we are on.
+  # We are on a detached head, and we need to be able to go back to it.
+  local build_head=$(git rev-parse HEAD)
 
-    current_branch=$(current_branch_name)
-    if [[ "$current_branch" != "$DEPLOY_BRANCH" ]]; then
-        # If branch is not deploy branch (e.g. develop)
-        # fetch the current develop branch
-        # Travis clones with `--depth`, which
-        # implies `--single-branch`, so we need to overwrite remote.origin.fetch to
-        # do that.
-        git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
-        git fetch origin $DEPLOY_BRANCH
+  current_branch=$(current_branch_name)
+  if [[ "$current_branch" != "$DEPLOY_BRANCH" ]]; then
+    # If branch is not deploy branch (e.g. develop)
+    # fetch the current develop branch
+    # Travis clones with `--depth`, which
+    # implies `--single-branch`, so we need to overwrite remote.origin.fetch to
+    # do that.
+    git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+    git fetch origin $DEPLOY_BRANCH
 
-        # create the tracking branch
-        git checkout -qf $DEPLOY_BRANCH
+    # create the tracking branch
+    git checkout -qf $DEPLOY_BRANCH
 
-        # finally, go back to where we were at the beginning
-        git checkout ${build_head}
-    fi
+    # finally, go back to where we were at the beginning
+    git checkout ${build_head}
+  fi
 }
 
 # Given a range, produce the list of file paths changed
@@ -35,8 +34,7 @@ function changed_paths_in_range() {
   git diff --name-only --diff-filter=d $compare_range
 }
 
-function fetch_master()
-{
+function fetch_master() {
   #Fetches the master branch
   #Very similar to fetch develop, but specifically points to master
   local build_head=$(git rev-parse HEAD)
@@ -65,7 +63,7 @@ function get_compare_range() {
     # On the deploy branch (e.g. develop)
     # Travis should check if this is a merge or not
     range_start="HEAD^1" # alias for first parent
-    range_end="HEAD^2" # alias for second parent
+    range_end="HEAD^2"   # alias for second parent
   else
     # Not on the deploy branch (e.g. develop)
     # When not on the deploy branch, always compare with the deploy branch
@@ -89,7 +87,7 @@ function push_docker_cmd() {
   owner=$1
   tool=$2
   version=$3
-  echo "docker push $owner/$tool:$version";
+  echo "docker push $owner/$tool:$version"
 }
 
 # Given a docker repo owner, image name, and version, produce a docker pull command
@@ -97,7 +95,7 @@ function pull_docker_cmd() {
   owner=$1
   tool=$2
   version=$3
-  echo "docker pull $owner/$tool:$version";
+  echo "docker pull $owner/$tool:$version"
 }
 
 # Given a docker repo owner, image name, source and dest tags produce a docker tag command
@@ -129,19 +127,18 @@ function ensure_local_image() {
   fi
 }
 
-
-
 # Given
 # 1. a Docker repo owner (e.g. "medforomics") and
 # 2. a list of relative paths to Dockerfiles (e.g. "fastqc/0.11.4/Dockerfile bwa/0.7.12/Dockerfile",
 # issue a docker build command and tag any versions with a latest symlink
 function build_images() {
-  echo "Building changed Dockerfiles..."; echo
+  echo "Building changed Dockerfiles..."
+  echo
   owner="$1"
   changed_paths="$2"
   # Check for Dockerfile changes first
   for changed_path in $changed_paths; do
-    IFS='/' read -r -a f <<< "$changed_path"
+    IFS='/' read -r -a f <<<"$changed_path"
     tool="${f[0]}"
     version="${f[1]}"
     filename="${f[2]}"
@@ -155,12 +152,13 @@ function build_images() {
         $(tag_docker_cmd $owner $tool $version "latest")
       fi
     fi
-  done;
+  done
 
   # After building all Dockerfiles, check for any changes to latest
-  echo "Updating latest tags..."; echo
+  echo "Updating latest tags..."
+  echo
   for changed_path in $changed_paths; do
-    IFS='/' read -r -a f <<< "$changed_path"
+    IFS='/' read -r -a f <<<"$changed_path"
     tool="${f[0]}"
     version="${f[1]}"
     filename="${f[2]}"
@@ -175,10 +173,10 @@ function build_images() {
       echo "Tagging $owner/$tool:$dest_version as $owner/$tool:latest"
       $(tag_docker_cmd $owner $tool $dest_version "latest")
     fi
-  done;
+  done
 
   if [[ "$attempted_build" == "" ]]; then
-    echo "No changes to Dockerfiles or latest symlinks detected, nothing to build";
+    echo "No changes to Dockerfiles or latest symlinks detected, nothing to build"
   fi
 }
 
@@ -190,7 +188,7 @@ function push_images() {
   owner="$1"
   changed_paths="$2"
   for changed_path in $changed_paths; do
-    IFS='/' read -r -a f <<< "$changed_path"
+    IFS='/' read -r -a f <<<"$changed_path"
     tool="${f[0]}"
     version="${f[1]}"
     filename="${f[2]}"
@@ -204,12 +202,13 @@ function push_images() {
         $(push_docker_cmd $owner $tool "latest")
       fi
     fi
-  done;
+  done
 
   # After pushing all Dockerfiles, check for any changes to latest and push those
-  echo "Pushing latest tags..."; echo
+  echo "Pushing latest tags..."
+  echo
   for changed_path in $changed_paths; do
-    IFS='/' read -r -a f <<< "$changed_path"
+    IFS='/' read -r -a f <<<"$changed_path"
     tool="${f[0]}"
     version="${f[1]}"
     filename="${f[2]}"
@@ -220,10 +219,10 @@ function push_images() {
       echo "Pushing $owner/$tool:latest..."
       $(push_docker_cmd $owner $tool "latest")
     fi
-  done;
+  done
 
   if [[ "$attempted_push" == "" ]]; then
-    echo "No changes to Dockerfiles or latest symlinks detected, nothing to push";
+    echo "No changes to Dockerfiles or latest symlinks detected, nothing to push"
   fi
 }
 
@@ -241,8 +240,8 @@ function print_changed() {
 function check_org() {
   if [[ "$DOCKERHUB_ORG" == "" ]]; then
     echo "Error: DOCKERHUB_ORG is empty"
-    echo "Please ensure DOCKERHUB_ORG is set to the name of the Docker Hub organization";
-    exit 1;
+    echo "Please ensure DOCKERHUB_ORG is set to the name of the Docker Hub organization"
+    exit 1
   else
     echo "Using Docker Hub org as $DOCKERHUB_ORG..."
   fi

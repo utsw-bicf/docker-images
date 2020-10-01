@@ -65,7 +65,8 @@ def run_docker_get_output(imagename, cmd, workdir=None, user=None):
     if user:
         options += "--user {} ".format(user)
     options += "-i --rm "
-    print("Testing image {} with: docker run {} {} {}".format(imagename, options, imagename, cmd))
+    print("Testing image {} with: docker run {} {} {}".format(
+        imagename, options, imagename, cmd))
     docker_cmd = "docker run {} {} {}".format(options, imagename, cmd)
     return run_bash_cmd(docker_cmd, ignore_non_zero_exit_status=True)
 
@@ -84,9 +85,11 @@ def run_tests(imagename, unittest_filepath):
         if not re.match(expect_pattern, docker_output):
             print_test_error(cmd, expect_text, docker_output)
             had_error = True
-        docker_output_with_options = run_docker_get_output(imagename, cmd, workdir=TEST_WORKDIR)
+        docker_output_with_options = run_docker_get_output(
+            imagename, cmd, workdir=TEST_WORKDIR)
         if not re.match(expect_pattern, docker_output_with_options):
-            print_test_error(cmd + " (with workdir and user options)", expect_text, docker_output_with_options)
+            print_test_error(cmd + " (with workdir and user options)",
+                             expect_text, docker_output_with_options)
             had_error = True
     return had_error
 
@@ -142,7 +145,7 @@ def find_and_run_tests(owner, changed_paths):
         parts = unittest_path.split(sep="/")
         if len(parts):
             tool, tag, _ = parts
-            imagename = "{}/{}:{}".format(owner, tool, tag).replace("+","_")
+            imagename = "{}/{}:{}".format(owner, tool, tag).replace("+", "_")
             had_error = run_tests(imagename, unittest_path)
             tested_images += 1
             if had_error:
@@ -150,13 +153,15 @@ def find_and_run_tests(owner, changed_paths):
                 had_errors = True
         else:
             print("Skipping {}".format(unittest_path))
-    print("Tested {} images. Images with errors: {}".format(tested_images, images_with_errors))
+    print("Tested {} images. Images with errors: {}".format(
+        tested_images, images_with_errors))
     return had_errors
 
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage python3 tests/imagecheck.py <docker_owner> [<unittest_or_dockerfile_path>...]")
+        print(
+            "Usage python3 tests/imagecheck.py <docker_owner> [<unittest_or_dockerfile_path>...]")
         sys.exit(1)
     else:
         owner = sys.argv[1]

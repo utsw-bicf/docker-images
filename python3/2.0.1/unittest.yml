@@ -2,4 +2,30 @@ commands:
   - cmd: '-c "python --version"'
     expect_text: "Python 3.8.3"
   - cmd: '-c "pip list"'
-    expect_text: "Package                Version\n---------------------- -------------------\nbrotlipy               0.7.0\ncertifi                2020.6.20\ncffi                   1.14.3\nchardet                3.0.4\nconda                  4.8.5\nconda-package-handling 1.7.0\ncryptography           3.1\nidna                   2.10\nnumpy                  1.19.1\npandas                 0.25.3\npip                    20.2.3\npycosat                0.6.3\npycparser              2.20\npyOpenSSL              19.1.0\nPySocks                1.7.1\npython-dateutil        2.8.1\npytz                   2020.1\nrequests               2.24.0\nruamel-yaml            0.15.87\nsetuptools             49.6.0.post20200814\nsix                    1.15.0\ntqdm                   4.49.0\nurllib3                1.25.10\nwheel                  0.35.1"
+    expect_text: |
+      Package                Version
+      ---------------------- -------------------
+      brotlipy               0.7.0
+      certifi                2020.6.20
+      cffi                   1.14.3
+      chardet                3.0.4
+      conda                  4.8.5
+      conda-package-handling 1.7.0
+      cryptography           3.1
+      idna                   2.10
+      numpy                  1.19.1
+      pandas                 0.25.3
+      pip                    20.2.3
+      pycosat                0.6.3
+      pycparser              2.20
+      pyOpenSSL              19.1.0
+      PySocks                1.7.1
+      python-dateutil        2.8.1
+      pytz                   2020.1
+      requests               2.24.0
+      ruamel-yaml            0.15.87
+      setuptools             49.6.0.post20200814
+      six                    1.15.0
+      tqdm                   4.49.0
+      urllib3                1.25.10
+      wheel                  0.35.1
