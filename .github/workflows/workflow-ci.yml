@@ -123,7 +123,7 @@ jobs:
 
       - name: CI Only
         id: runAllCI
-        if: ! ${{ steps.checkBuild.outputs.build }}
+        if: ${{ steps.checkBuild.outputs.build }} == ${{ false }}
         env:
           test: ${{ steps.checkBuild.outputs.build }}
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
