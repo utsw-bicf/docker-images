@@ -6,15 +6,15 @@ images:
   compute:
     2.0.0:
       children: [null]
-      parents: ['nextflow20:2.0.1']
+      parents: ["nextflow20:2.0.1"]
   java12:
     2.0.1:
-      children: ['nextflow20:2.0.1']
-      parents: ['bicfbase:2.0.1']
+      children: ["nextflow20:2.0.1"]
+      parents: ["bicfbase:2.0.1"]
   nextflow20:
     2.0.1:
-      children: ['compute:2.0.0']
-      parents: ['java12:2.0.1']
+      children: ["compute:2.0.0"]
+      parents: ["java12:2.0.1"]
   python3:
     2.0.1:
       children: [null]
