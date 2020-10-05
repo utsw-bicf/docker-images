@@ -25,8 +25,8 @@ commands:
       pytz                   2020.1
       requests               2.24.0
       ruamel-yaml            0.15.87
-      setuptools             49.6.0.post20200925
+      setuptools             50.3.0.post20201005
       six                    1.15.0
-      tqdm                   4.49.0
+      tqdm                   4.50.0
       urllib3                1.25.10
       wheel                  0.35.1

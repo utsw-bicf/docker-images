@@ -11,7 +11,7 @@ commands:
       chardet                3.0.4
       conda                  4.8.5
       conda-package-handling 1.7.0
-      cryptography           3.1.1
+      cryptography           3.1
       idna                   2.10
       numpy                  1.19.1
       pandas                 0.25.3
@@ -24,8 +24,8 @@ commands:
       pytz                   2020.1
       requests               2.24.0
       ruamel-yaml            0.15.87
-      setuptools             50.3.0.post20201005
+      setuptools             49.6.0.post20200814
       six                    1.15.0
-      tqdm                   4.50.0
+      tqdm                   4.49.0
       urllib3                1.25.10
       wheel                  0.35.1
