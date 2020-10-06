@@ -111,8 +111,8 @@ jobs:
         if: steps.checkBuild.outputs.build == 'true'
         uses: actions-hub/docker/login@master
         env:
-          DOCKER_PASSWORD: ${{secrets.BICF_DOCKERHUB_PW}}
-          DOCKER_USERNAME: ${{secrets.BICF_DOCKERHUB_UN}}
+          DOCKER_PASSWORD: ${{secrets.DOCKERHUB_PW}}
+          DOCKER_USERNAME: ${{secrets.DOCKERHUB_UN}}
 
       - name: Push_to_DockerHub
         id: pushToDockerHub
