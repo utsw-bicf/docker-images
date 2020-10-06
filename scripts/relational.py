@@ -44,7 +44,7 @@ def update_ancestor(parent, docker_image):
     else:
         new_children = [docker_image]
     build_entry(parent_name, parent_version, grandparent, new_children)
-    
+
 
 def build_entry(image_name, image_version, parent_images, child_images):
     """
@@ -76,7 +76,11 @@ def build_entry(image_name, image_version, parent_images, child_images):
                     'children': child_images
                 }
             }
+            new_latest = {
+                image_name: image_version
+            }
             NEWDATA['images'][image_name].update(new_image)
+            NEWDATA['latest'].update(new_latest)
     else:
         new_image = {
             image_name: {
@@ -87,6 +91,10 @@ def build_entry(image_name, image_version, parent_images, child_images):
             }
         }
         NEWDATA['images'].update(new_image)
+    new_latest = {
+        image_name: image_version
+    }
+    NEWDATA['latest'].update(new_latest)
     return new_image
 
 
@@ -136,7 +144,7 @@ def main():
         print("Usage python3 scripts/relational.py <DOCKERFILE_PATH>")
         sys.exit(1)
     else:
-    #Setup the global variables
+        # Setup the global variables
         DOCKERFILE_PATH = os.path.abspath(sys.argv[1])
         image_name = re.split('/', DOCKERFILE_PATH)[-3]
         image_version = re.split('/', DOCKERFILE_PATH)[-2]
@@ -145,13 +153,14 @@ def main():
         NEWDATA = load_yaml()
         parents = get_parents()
         children = get_children(image_version, image_name)
-    #Start by adding the image to the table
+    # Start by adding the image to the table
         build_entry(image_name, image_version, parents, children)
-    #Update all parent images
+    # Update all parent images
     for parent in parents:
         update_ancestor(parent, docker_image)
-    #Write out the new relations.yaml
+    # Write out the new relations.yaml
     write_yaml()
+
 
 if __name__ == "__main__":
     main()
