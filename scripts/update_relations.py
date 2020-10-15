@@ -101,6 +101,8 @@ def build_entry(image_name, image_version, parent_images, child_images):
 def get_children(image_version, image_name):
     """
     Finds any children image in the relations.yaml file
+    :param image_name: str : Docker image to get the child images from
+    :param image_version: str : Specific version of the image to get the child images from
     """
     if image_name in ORIDATA['images']:
         if image_version in ORIDATA['images'][image_name]:
@@ -141,7 +143,7 @@ def main():
     global NEWDATA
     global DOCKERFILE_PATH
     if len(sys.argv) < 1:
-        print("Usage python3 scripts/relational.py <DOCKERFILE_PATH>")
+        print("Usage python3 scripts/update_relations.py <DOCKERFILE_PATH>")
         sys.exit(1)
     else:
         # Setup the global variables
