@@ -10,7 +10,7 @@ RUN apt-get update -y --fix-missing && \
   apt-get update -y --fix-missing && \
   apt-get upgrade -y
 RUN locale
-RUN apt-get install -y gcc g++ apt-utils wget gzip pigz pbzip2 zip software-properties-common make parallel pandoc
+RUN apt-get install -y gcc g++ apt-utils wget gzip pigz pbzip2 zip software-properties-common make parallel pandoc git
 
 RUN while parallel --citation; do echo "will cite"; done
 

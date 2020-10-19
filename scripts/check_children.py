@@ -27,7 +27,7 @@ def get_update_type(image_version, prev_version):
     # Ensure that the new major version is not less than the old major version
     if (curr_version_major < prev_version_major):
         print("ERROR: New major version number {} is less than the previous major version number {}, this is not allowed!\
-            \nPlease re-version your Docker image.".format(curr_version_major, curr_version_minor))
+            \nPlease re-version your Docker image.".format(curr_version_major, prev_version_major))
         exit(1)
     elif(curr_version_major > prev_version_major):
         print("New major version number detected, re-versioning and creating new child image paths.")
@@ -87,7 +87,8 @@ def update_children(child_list, update_type):
             position = child_list.index(child)
             new_child = "{}:{}".format(child_image, new_child_version)
             child_list[position] = new_child
-            print("Found child image that will require updating: Update {} to {}".format(child, new_child))
+            print("Found child image that will require updating: Update {} to {}".format(
+                child, new_child))
     return child_list
 
 
@@ -115,7 +116,8 @@ def get_children(image_name, image_version):
             versions = np.array(list(ORIDATA['images'][image_name]))
             prev_version = np.array(versions)[-1]
             update_type = get_update_type(image_version, prev_version)
-            update_children(ORIDATA['images'][image_name][prev_version]['children'], update_type)
+            update_children(ORIDATA['images'][image_name]
+                            [prev_version]['children'], update_type)
             return [None]
 
     else:
@@ -137,8 +139,7 @@ def main():
         ORIDATA = load_yaml()
         image_name = re.split('/|\\\\', DOCKERFILE_PATH)[-3]
         image_version = re.split('/|\\\\', DOCKERFILE_PATH)[-2]
-        children = get_children(image_name, image_version)
-        print(children)
+        get_children(image_name, image_version)
 
 
 if __name__ == "__main__":
