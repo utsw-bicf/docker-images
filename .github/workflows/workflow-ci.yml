@@ -78,6 +78,7 @@ jobs:
           DEPLOY_BRANCH: ${{secrets.DEPLOY_BRANCH}}
           DOCKER_PASSWORD: ${{secrets.DOCKERHUB_PW}}
           DOCKER_USERNAME: ${{secrets.DOCKERHUB_UN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           paths: ${{ steps.checkBuild.outputs.paths }}
           docker_file: ${{ steps.checkBuild.outputs.docker_file }}
         run: |
@@ -130,13 +131,3 @@ jobs:
           DOCKERHUB_ORG: ${{secrets.DOCKERHUB_ORG}}
         run: |
           python3 tests/ci_latest_paths.py "${DOCKERHUB_ORG}" relations.yaml
-
-      - name: Check for child images
-        id: checkChildren
-        if: steps.checkBuild.outputs.build == 'true'
-        run: |
-
-
-      - name: Update Children
-        id: updateChildren
-        if: steps.checkChildren.outputs.children == 'true'

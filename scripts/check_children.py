@@ -14,7 +14,8 @@ from update_relations import load_yaml
 
 # Global variables
 RELATION_FILENAME = "relations.yaml"
-GITHUB_TOK = os.environ(['github_token'])
+GITHUB_TOKEN = os.environ(['GITHUB_TOKEN'])
+GITHUB_REPO = os.environ(['GITHUB_REPOSITORY'])
 
 
 # Methods
@@ -61,6 +62,8 @@ def update_children(child_list, update_type):
     :param image_name: str : Name of the Docker image to be incrimented
     :param image_version: str : Version number to incriment
     """
+    g = Github(GITHUB_TOKEN)
+    g.get_user().login
     for child in child_list:
         child_image = re.split(':', child)[0]
         child_version = re.split(':', child)[1]
@@ -91,8 +94,10 @@ def update_children(child_list, update_type):
             child_list[position] = new_child
             print("Found child image that will require updating: Update {} to {}".format(
                 child, new_child))
+            issue_title = "Update {} to {}".format(child, new_child)
+            issue_body = "Parent image has been updated, please update the image {} to use the new parent image.  Recommended versioning: {}".format(child, new_child_version)
+            g.get_repo(GITHUB_REPO).create_issue(title=issue_title, body=issue_body)
             
-    return child_list
 
 
 def is_terminated(image_name):
