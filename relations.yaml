@@ -32,5 +32,4 @@ latest:
     python3: 2.0.1,
     python3.7: 2.0.1,
   }
-terminated: 
-  {}
+terminated: {}

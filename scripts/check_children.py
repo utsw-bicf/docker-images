@@ -9,10 +9,12 @@ import sys
 import re
 import yaml
 import numpy as np
+from github import Github
 from update_relations import load_yaml
 
 # Global variables
 RELATION_FILENAME = "relations.yaml"
+GITHUB_TOK = os.environ(['github_token'])
 
 
 # Methods
@@ -89,6 +91,7 @@ def update_children(child_list, update_type):
             child_list[position] = new_child
             print("Found child image that will require updating: Update {} to {}".format(
                 child, new_child))
+            
     return child_list
 
 

@@ -108,7 +108,9 @@ def get_children(image_version, image_name):
         if image_version in ORIDATA['images'][image_name]:
             return ORIDATA['images'][image_name][image_version]['children']
         else:
-            return [None]
+            versions = ORIDATA['images'][image_name]
+            version = versions[-1]
+            return ORIDATA['images'][image_name][version]['children']
     else:
         return [None]
 
