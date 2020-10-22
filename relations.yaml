@@ -1,35 +1,58 @@
 images:
   bicfbase:
     2.0.1:
-      children: ["python3.7:2.0.1", "java12:2.0.1", "python3:2.0.1"]
-      parents: ["ubuntu:18.04"]
+      children:
+      - python3.7:2.0.1
+      - java12:2.0.1
+      - python3:2.0.1
+      parents:
+      - ubuntu:18.04
+    2.0.2:
+      children:
+      - null
+      parents:
+      - ubuntu:18.04
   compute:
     2.0.0:
-      children: [null]
-      parents: ["nextflow20:2.0.1"]
+      children:
+      - null
+      parents:
+      - nextflow20:2.0.1
   java12:
     2.0.1:
-      children: ["nextflow20:2.0.1"]
-      parents: ["bicfbase:2.0.1"]
+      children:
+      - nextflow20:2.0.1
+      parents:
+      - bicfbase:2.0.1
   nextflow20:
     2.0.1:
-      children: ["compute:2.0.0"]
-      parents: ["java12:2.0.1"]
+      children:
+      - compute:2.0.0
+      parents:
+      - java12:2.0.1
   python3:
     2.0.1:
-      children: [null]
-      parents: ["bicfbase:2.0.1"]
+      children:
+      - null
+      parents:
+      - bicfbase:2.0.1
   python3.7:
     2.0.1:
-      children: [null]
-      parents: ["bicfbase:2.0.1"]
+      children:
+      - null
+      parents:
+      - bicfbase:2.0.1
+  ubuntu:
+    '18.04':
+      children:
+      - bicfbase:2.0.2
+      parents: []
 latest:
-  {
-    bicfbase: 2.0.1,
-    compute: 2.0.0,
-    java12: 2.0.1,
-    nextflow20: 2.0.1,
-    python3: 2.0.1,
-    python3.7: 2.0.1,
-  }
+  bicfbase: 2.0.2
+  compute: 2.0.0
+  java12: 2.0.1
+  nextflow20: 2.0.1
+  python3: 2.0.1
+  python3.7: 2.0.1
+  ubuntu: '18.04'
 terminated: {}
