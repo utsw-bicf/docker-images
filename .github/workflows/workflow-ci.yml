@@ -43,7 +43,7 @@ jobs:
             git show origin/master:relations.yaml > master_relation.yml
             docker_file=$(print_changed "${compare_range}" "${paths}" | grep -i "/dockerfile$")
             echo "::set-output name=docker_file::$(echo ${docker_file})"
-            python3 -m pip install numpy==1.19.2 PyGitHub==1.53
+            python3 -m pip install numpy==1.19.2 PyGitHub==1.53 PyYAML==5.3.1
             python3 scripts/check_pre_exist.py master_relation.yml ${docker_file}
             rm master_relation.yml
             echo "::set-output name=build::${{true}}"
