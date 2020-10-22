@@ -95,9 +95,10 @@ def update_children(child_list, update_type):
             print("Found child image that will require updating: Update {} to {}".format(
                 child, new_child))
             issue_title = "Update {} to {}".format(child, new_child)
-            issue_body = "Parent image has been updated, please update the image {} to use the new parent image.  Recommended versioning: {}".format(child, new_child_version)
-            g.get_repo(GITHUB_REPO).create_issue(title=issue_title, body=issue_body)
-            
+            issue_body = "Parent image has been updated, please update the image {} to use the new parent image.  Recommended versioning: {}".format(
+                child, new_child_version)
+            g.get_repo(GITHUB_REPO).create_issue(
+                title=issue_title, body=issue_body)
 
 
 def is_terminated(image_name):
