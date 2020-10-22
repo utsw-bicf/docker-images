@@ -81,6 +81,9 @@ def update_children(child_list, update_type):
     :param image_version: str : Version number to incriment
     """
     g = Github(GITHUB_TOKEN)
+    issue_array = []
+    for issue in list(g.get_repo(GITHUB_REPO).get_issues(state='open')):
+        issue_array.append(issue.title)
     for child in child_list:
         child_image = re.split(':', child)[0]
         child_version = re.split(':', child)[1]
@@ -112,10 +115,15 @@ def update_children(child_list, update_type):
             print("Found child image that will require updating: Update {} to {}".format(
                 child, new_child))
             issue_title = "Update {} to {}".format(child, new_child)
-            issue_body = "Parent image has been updated, please update the image {} to use the new parent image.  Recommended versioning: {}".format(
-                child, new_child_version)
-            g.get_repo(GITHUB_REPO).create_issue(
-                title=issue_title, body=issue_body)
+            if not issue_title in issue_array:
+                issue_body = "Parent image has been updated, please update the image {} to use the new parent image.  Recommended versioning: {}".format(
+                    child, new_child_version)
+                g.get_repo(GITHUB_REPO).create_issue(
+                    title=issue_title, body=issue_body)
+            else:
+                print("Issue for updating {} to {} already open.".format(
+                    child, new_child))
+                continue
 
 
 def write_yaml():
