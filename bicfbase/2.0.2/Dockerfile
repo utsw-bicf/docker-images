@@ -19,4 +19,3 @@ ENV LANG=C.UTF-8
 
 VOLUME /var/tmp/results
 VOLUME /var/tmp/data
-ENTRYPOINT ["/bin/bash"]
