@@ -81,7 +81,6 @@ def update_children(child_list, update_type):
     :param image_version: str : Version number to incriment
     """
     g = Github(GITHUB_TOKEN)
-    g.get_user().login
     for child in child_list:
         child_image = re.split(':', child)[0]
         child_version = re.split(':', child)[1]
