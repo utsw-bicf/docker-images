@@ -15,8 +15,8 @@ from github import Github
 
 # Global varibles set
 RELATION_FILENAME = "relations.yaml"
-GITHUB_TOKEN = os.environ(['GITHUB_TOKEN'])
-GITHUB_REPO = os.environ(['GITHUB_REPOSITORY'])
+GITHUB_TOKEN = os.environ['GITHUB_TOKEN']
+GITHUB_REPO = os.environ['GITHUB_REPOSITORY']
 
 # Subroutines
 
