@@ -85,7 +85,7 @@ def update_children(child_list, update_type):
     for issue in list(g.get_repo(GITHUB_REPO).get_issues(state='open')):
         issue_array.append(issue.title)
     for child in child_list:
-        if child = None:
+        if child == None:
             continue
         else:
             child_image = re.split(':', child)[0]
