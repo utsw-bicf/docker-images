@@ -85,8 +85,8 @@ def update_children(child_list, update_type):
     for issue in list(g.get_repo(GITHUB_REPO).get_issues(state='open')):
         issue_array.append(issue.title)
     for child in child_list:
-        child_image = re.split(':', child)[0]
-        child_version = re.split(':', child)[1]
+        child_image = child.split(sep=":")[0]
+        child_version = child.split(sep=":")[1]
         # Ensure that the image is not in the terminated list
         if (is_terminated(child_image)):
             print(
