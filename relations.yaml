@@ -18,6 +18,12 @@ images:
       - null
       parents:
       - nextflow20:2.0.1
+  hisat2.2.1:
+    2.0.0:
+      children:
+      - null
+      parents:
+      - python3.7:2.0.2
   java12:
     2.0.1:
       children:
@@ -44,7 +50,7 @@ images:
       - bicfbase:2.0.1
     2.0.2:
       children:
-      - null
+      - hisat2.2.1:2.0.0
       parents:
       - bicfbase:2.0.2
   ubuntu:
@@ -55,6 +61,7 @@ images:
 latest:
   bicfbase: 2.0.2
   compute: 2.0.0
+  hisat2.2.1: 2.0.0
   java12: 2.0.1
   nextflow20: 2.0.1
   python3: 2.0.1
