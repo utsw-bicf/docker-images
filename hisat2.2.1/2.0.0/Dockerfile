@@ -9,4 +9,3 @@ RUN curl https://cloud.biohpc.swmed.edu/index.php/s/4pMgDq4oAF9QCfA/download > h
   popdir
 
 ENV PATH=/hisat2-2.2.1/:${PATH}
-/
