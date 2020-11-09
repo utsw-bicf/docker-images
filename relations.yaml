@@ -9,7 +9,7 @@ images:
       - ubuntu:18.04
     2.0.2:
       children:
-      - null
+      - python3.7:2.0.2
       parents:
       - ubuntu:18.04
   compute:
@@ -42,6 +42,11 @@ images:
       - null
       parents:
       - bicfbase:2.0.1
+    2.0.2:
+      children:
+      - null
+      parents:
+      - bicfbase:2.0.2
   ubuntu:
     '18.04':
       children:
@@ -53,6 +58,6 @@ latest:
   java12: 2.0.1
   nextflow20: 2.0.1
   python3: 2.0.1
-  python3.7: 2.0.1
+  python3.7: 2.0.2
   ubuntu: '18.04'
 terminated: {}
