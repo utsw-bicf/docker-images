@@ -3,8 +3,7 @@ commands:
     expect_text: |
       bedtools v2.26.0
   - cmd: "sambamba --version"
-    expect_text: |
-      *sambamba 0.7.1*
+    expect_text: "*sambamba 0.7.1*"
   - cmd: "htsfile --version | head -n1"
     expect_text: 'htsfile (htslib) 1.10.2'
   - cmd: "samtools --version | head -n2"
