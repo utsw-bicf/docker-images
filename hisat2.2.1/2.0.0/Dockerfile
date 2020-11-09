@@ -4,8 +4,8 @@ LABEL author="Jon Gesell"
 RUN wget https://cloud.biohpc.swmed.edu/index.php/s/4pMgDq4oAF9QCfA/download && \
   unzip download && \
   rm download && \
-  pushd hisat2-2.2.1 && \
+  cd hisat2-2.2.1 && \
   make && \
-  popd
+  cd /
 
 ENV PATH=/hisat2-2.2.1/:${PATH}
