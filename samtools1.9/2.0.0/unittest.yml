@@ -2,19 +2,17 @@ commands:
   - cmd: "bedtools --version"
     expect_text: |
       bedtools v2.26.0
-  - cmd: "sambamba --version | head -n 2"
+  - cmd: "sambamba --version | head -n2 | tail -n1"
     expect_text: |
-
       sambamba 0.7.1
-  - cmd: "htsfile --version | head -n 1"
+  - cmd: "htsfile --version | head -n1"
     expect_text: |
       htsfile (htslib) 1.10.2
-      Copyright (C) 2019 Genome Research Ltd.
-  - cmd: "samtools --version | head -n 2"
+  - cmd: "samtools --version | head -n2"
     expect_text: |
       samtools 1.9
       Using htslib 1.9
-  - cmd: "bcftools --version | head -n 2"
+  - cmd: "bcftools --version | head -n2"
     expect_text: |
       bcftools 1.9
       Using htslib 1.9
