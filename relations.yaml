@@ -23,7 +23,7 @@ images:
       children:
       - null
       parents:
-      - python3.7:2.0.2
+      - samtools1.9:2.0.0
   java12:
     2.0.1:
       children:
@@ -50,9 +50,15 @@ images:
       - bicfbase:2.0.1
     2.0.2:
       children:
-      - hisat2.2.1:2.0.0
+      - samtools1.9:2.0.0
       parents:
       - bicfbase:2.0.2
+  samtools1.9:
+    2.0.0:
+      children:
+      - hisat2.2.1:2.0.0
+      parents:
+      - python3.7:2.0.2
   ubuntu:
     '18.04':
       children:
@@ -66,5 +72,6 @@ latest:
   nextflow20: 2.0.1
   python3: 2.0.1
   python3.7: 2.0.2
+  samtools1.9: 2.0.0
   ubuntu: '18.04'
 terminated: {}
