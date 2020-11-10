@@ -1,4 +1,4 @@
-FROM bicf/python3.7:2.0.2
+FROM bicf/samtools1.9:2.0.0
 LABEL author="Jon Gesell"
 
 RUN wget https://cloud.biohpc.swmed.edu/index.php/s/fE9QCsX3NH4QwBi/download && \
