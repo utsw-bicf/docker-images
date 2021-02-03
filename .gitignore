@@ -1,3 +1,2 @@
-.vscode/settings.json
 master_relation.yml
-master_relation.yml
+*.pyc
