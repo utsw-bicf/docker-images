@@ -29,4 +29,4 @@ RUN apt-get -qq update; \
 # Configure environment variables for MCR
 ENV LD_LIBRARY_PATH /opt/mcr/v95/runtime/glnxa64:/opt/mcr/v95/bin/glnxa64:/opt/mcr/v95/sys/os/glnxa64:/opt/mcr/v95/extern/bin/glnxa64
 
-ENTRYPOINT [ "/bin/sh", "/execute/utrack/run_utrack.sh", "/opt/mcr/v95" ]
+CMD [ "/bin/sh", "/execute/utrack/run_utrack.sh", "/opt/mcr/v95" ]
