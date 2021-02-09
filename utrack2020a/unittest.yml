@@ -1,0 +1,4 @@
+commands:
+  - cmd: "find /execute/utrack/run_utrack.sh"
+    expect_text: |
+      /execute/utrack/run_utrack.sh
