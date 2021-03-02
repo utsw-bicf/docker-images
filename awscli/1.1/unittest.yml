@@ -1,0 +1,3 @@
+commands:
+  - cmd: '-c "aws --version"'
+    expect_text: "aws-cli/1.16.293 Python/3.6.9 Linux/5.4.72-microsoft-standard-WSL2 botocore/1.13.29"

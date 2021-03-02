@@ -1,0 +1,4 @@
+FROM bicf/python3:1.2
+LABEL author="Jon Gesell"
+
+RUN pip3 install awscli

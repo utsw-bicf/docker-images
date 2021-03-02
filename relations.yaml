@@ -1,4 +1,15 @@
 images:
+  awscli:
+    1.0:
+      children:
+      - null
+      parents:
+      - python3:1.1
+    1.1:
+      children:
+      - null
+      parents:
+      - python3:1.2
   bicfbase:
     2.0.1:
       children:
@@ -65,6 +76,7 @@ images:
       - bicfbase:2.0.2
       parents: []
 latest:
+  awscli: 1.1
   bicfbase: 2.0.2
   compute: 2.0.0
   hisat2.2.1: 2.0.0
