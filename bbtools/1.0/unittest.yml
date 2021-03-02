@@ -1,3 +1,0 @@
-commands:
-  - cmd: '-c "bbdbbversion.sh"'
-    expect_text: "38.67"

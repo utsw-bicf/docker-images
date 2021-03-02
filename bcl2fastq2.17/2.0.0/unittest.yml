@@ -1,0 +1,4 @@
+commands:
+  - cmd: '-c "bcl2fastq --version 2>&1| head -n2 | tail -n1"'
+    expect_text: |
+      bcl2fastq v2.17.1.14

@@ -1,50 +1,19 @@
 images:
-  awscli:
-    1.0:
-      children:
-        - null
-      parents:
-        - python3:1.1
-    1.1:
-      children:
-        - null
-      parents:
-        - python3:1.2
   bbtools:
-    1.0:
-      children:
-        - null
-      parents:
-        - bicfbase:1.0
-    1.1:
-      children:
-        - null
-      parents:
-        - bicfbase:1.1
-    1.2:
-      children:
-        - null
-      parents:
-        - bicfbase:1.2
     2.0.0:
       children:
         - null
       parents:
-        - java12:2.0.0
+        bicfbase:2.0.0
   bicfbase:
-    1.0:
-      children:
-        - bbtools:1.0
-      parents:
-        - ubuntu:18.04
     1.1:
       children:
-        - bbtools:1.1
+        - null
       parents:
         - ubuntu:18.04
-    1.2:
+    2.0.0:
       children:
-        - bbtools:1.2
+        - bbtools:2.0.0
       parents:
         - ubuntu:18.04
     2.0.1:
@@ -114,11 +83,12 @@ images:
   ubuntu:
     "18.04":
       children:
+        - bicfbase:1.1
         - bicfbase:2.0.2
       parents: []
 latest:
-  awscli: 1.1
   bbtools: 2.0.0
+  bcl2fastq2.17: 2.0.0
   bicfbase: 2.0.2
   compute: 2.0.0
   hisat2.2.1: 2.0.0
