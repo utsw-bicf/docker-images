@@ -1,5 +1,5 @@
 commands:
-  - cmd: '-c "cellranger testrun --version" | head -n3'
+  - cmd: 'testrun --version | head -n3'
     expect_text: |
       /opt/cellranger-2.1.1/cellranger-cs/2.1.1/bin
       cellranger testrun (2.1.1)
