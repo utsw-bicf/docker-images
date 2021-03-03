@@ -8,9 +8,15 @@ images:
       parents:
         - bicfbase:2.0.0
   bicfbase:
+    1.1:
+      children:
+        - fastqc:1.1
+      parents:
+        - ubuntu:18.04
     2.0.0:
       children:
         - bcl2fastq2.17:2.0.0
+        - fastqc:2.0.0
         - python3:2.0.0
       parents:
         - ubuntu:18.04
@@ -56,6 +62,17 @@ images:
         - null
       parents:
         - python3:2.0.0
+  fastqc:
+    1.1:
+      children:
+        - null
+      parents:
+        - bicfbase:1.1
+    2.0.0:
+      children:
+        - null
+      parents:
+        - bicfbase:2.0.0
   hisat2.2.1:
     2.0.0:
       children:
@@ -114,6 +131,8 @@ latest:
   cellranger3.0.2: 2.0.0
   cellranger3.1.0: 2.0.0
   compute: 2.0.0
+  diamond: 2.0.0
+  fastqc: 2.0.0
   hisat2.2.1: 2.0.0
   java12: 2.0.1
   nextflow20: 2.0.1
