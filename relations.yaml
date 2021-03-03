@@ -4,6 +4,7 @@ images:
       children:
         - cellranger2.1.1:2.0.0
         - cellranger3.0.2:2.0.0
+        - cellranger3.1.0:2.0.0
       parents:
         - bicfbase:2.0.0
   bicfbase:
@@ -31,6 +32,12 @@ images:
       parents:
         - bcl2fastq2.17:2.0.0
   cellranger3.0.2:
+    2.0.0:
+      children:
+        - null
+      parents:
+        - bcl2fastq2.17:2.0.0
+  cellranger3.1.0:
     2.0.0:
       children:
         - null
@@ -93,6 +100,7 @@ latest:
   bicfbase: 2.0.2
   cellranger2.1.1: 2.0.0
   cellranger3.0.2: 2.0.0
+  cellranger3.1.0: 2.0.0
   compute: 2.0.0
   hisat2.2.1: 2.0.0
   java12: 2.0.1
@@ -104,3 +112,4 @@ latest:
 terminated:
   - cellranger2.1.1
   - cellranger3.0.2
+  - cellranger3.1.0
