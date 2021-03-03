@@ -17,6 +17,7 @@ images:
       children:
         - bcl2fastq2.17:2.0.0
         - fastqc:2.0.0
+        - java12:2.0.0
         - python3:2.0.0
       parents:
         - ubuntu:18.04
@@ -80,6 +81,11 @@ images:
       parents:
         - samtools1.9:2.0.0
   java12:
+    2.0.0:
+      children:
+        - null
+      parents:
+        - bicfbase:2.0.0
     2.0.1:
       children:
         - nextflow20:2.0.1
