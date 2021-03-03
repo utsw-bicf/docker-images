@@ -1,0 +1,7 @@
+commands:
+  - cmd: '-c "parallel --version | head -n1"'
+    expect_text: |
+      GNU parallel 20161222
+  - cmd: '-c "pandoc --version | head -n1"'
+    expect_text: |
+      pandoc 1.19.2.4
