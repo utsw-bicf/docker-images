@@ -11,6 +11,7 @@ images:
     2.0.0:
       children:
         - bcl2fastq2.17:2.0.0
+        - python3:2.0.0
       parents:
         - ubuntu:18.04
     2.0.1:
@@ -49,6 +50,12 @@ images:
         - null
       parents:
         - nextflow20:2.0.1
+  diamond:
+    2.0.0:
+      children:
+        - null
+      parents:
+        - python3:2.0.0
   hisat2.2.1:
     2.0.0:
       children:
@@ -68,6 +75,11 @@ images:
       parents:
         - java12:2.0.1
   python3:
+    2.0.0:
+      children:
+        - diamond:2.0.0
+      parents:
+        - bicfbase:2.0.0
     2.0.1:
       children:
         - null
