@@ -148,6 +148,7 @@ images:
       children:
         - diamond:2.0.0
         - multiqc:2.0.0
+        - spades:2.0.0
       parents:
         - bicfbase:2.0.0
     2.0.1:
@@ -172,6 +173,12 @@ images:
         - hisat2.2.1:2.0.0
       parents:
         - python3.7:2.0.2
+  spades:
+    2.0.0:
+      children:
+        - null
+      parents:
+        - python3:2.0.0
   ubuntu:
     "18.04":
       children:
