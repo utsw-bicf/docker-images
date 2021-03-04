@@ -1,0 +1,23 @@
+FROM bicf/python3:2.0.0
+LABEL author="Jon Gesell"
+
+#Run basic installation prerequisites
+RUN apt-get update && \
+  apt-get install -y make python3-matplotlib texlive-xetex
+
+RUN wget https://sourceforge.net/projects/libpng/files/zlib/1.2.9/zlib-1.2.9.tar.gz && \
+  tar -xvf zlib-1.2.9.tar.gz && \
+  rm zlib-1.2.9.tar.gz
+WORKDIR /zlib-1.2.9
+RUN ./configure && \
+  make && \
+  make install && \
+  ln -s -f /usr/local/lib/libz.so.1.2.9/lib libz.so.1
+WORKDIR /
+
+RUN conda install -c bioconda pandoc
+
+#Install multiqc
+RUN pip3 install multiqc
+
+ENTRYPOINT ["multiqc"]

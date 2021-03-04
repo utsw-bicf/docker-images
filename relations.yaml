@@ -17,6 +17,7 @@ images:
     1.1:
       children:
         - fastqc:1.1
+        - multiqc:1.1
       parents:
         - ubuntu:18.04
     2.0.0:
@@ -112,6 +113,17 @@ images:
         - null
       parents:
         - bicfbase:2.0.0
+  multiqc:
+    1.1:
+      children:
+        - null
+      parents:
+        - bicfbase:1.1
+    2.0.0:
+      children:
+        - null
+      parents:
+        python3:2.0.0
   nextflow20:
     2.0.1:
       children:
@@ -122,6 +134,7 @@ images:
     2.0.0:
       children:
         - diamond:2.0.0
+        - multiqc:2.0.0
       parents:
         - bicfbase:2.0.0
     2.0.1:
