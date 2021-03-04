@@ -1,33 +1,5 @@
 images:
-  bcl2fastq2.17:
-    2.0.0:
-      children:
-        - cellranger2.1.1:2.0.0
-        - cellranger3.0.2:2.0.0
-        - cellranger3.1.0:2.0.0
-      parents:
-        - bicfbase:2.0.0
-  bbtools:
-    2.0.0:
-      children:
-        - null
-      parents:
-        bicfbase:2.0.0
   bicfbase:
-    1.1:
-      children:
-        - fastqc:1.1
-      parents:
-        - ubuntu:18.04
-    2.0.0:
-      children:
-        - bbtools:2.0.0
-        - bcl2fastq2.17:2.0.0
-        - fastqc:2.0.0
-        - java12:2.0.0
-        - python3:2.0.0
-      parents:
-        - ubuntu:18.04
     2.0.1:
       children:
         - python3.7:2.0.1
@@ -40,47 +12,12 @@ images:
         - python3.7:2.0.2
       parents:
         - ubuntu:18.04
-  cellranger2.1.1:
-    2.0.0:
-      children:
-        - null
-      parents:
-        - bcl2fastq2.17:2.0.0
-  cellranger3.0.2:
-    2.0.0:
-      children:
-        - null
-      parents:
-        - bcl2fastq2.17:2.0.0
-  cellranger3.1.0:
-    2.0.0:
-      children:
-        - null
-      parents:
-        - bcl2fastq2.17:2.0.0
   compute:
     2.0.0:
       children:
         - null
       parents:
         - nextflow20:2.0.1
-  diamond:
-    2.0.0:
-      children:
-        - null
-      parents:
-        - python3:2.0.0
-  fastqc:
-    1.1:
-      children:
-        - null
-      parents:
-        - bicfbase:1.1
-    2.0.0:
-      children:
-        - null
-      parents:
-        - bicfbase:2.0.0
   hisat2.2.1:
     2.0.0:
       children:
@@ -88,11 +25,6 @@ images:
       parents:
         - samtools1.9:2.0.0
   java12:
-    2.0.0:
-      children:
-        - bbtools:2.0.0
-      parents:
-        - bicfbase:2.0.0
     2.0.1:
       children:
         - nextflow20:2.0.1
@@ -105,11 +37,6 @@ images:
       parents:
         - java12:2.0.1
   python3:
-    2.0.0:
-      children:
-        - diamond:2.0.0
-      parents:
-        - bicfbase:2.0.0
     2.0.1:
       children:
         - null
@@ -135,29 +62,16 @@ images:
   ubuntu:
     "18.04":
       children:
-        - bicfbase:1.1
-        - bicfbase:2.0.0
         - bicfbase:2.0.1
         - bicfbase:2.0.2
       parents: []
 latest:
-  bbtools: 2.0.0
-  bcl2fastq2.17: 2.0.0
   bicfbase: 2.0.2
-  cellranger2.1.1: 2.0.0
-  cellranger3.0.2: 2.0.0
-  cellranger3.1.0: 2.0.0
   compute: 2.0.0
-  diamond: 2.0.0
-  fastqc: 2.0.0
   hisat2.2.1: 2.0.0
   java12: 2.0.1
   nextflow20: 2.0.1
   python3: 2.0.1
   python3.7: 2.0.2
   samtools1.9: 2.0.0
-terminated:
-  - cellranger2.1.1
-  - cellranger3.0.2
-  - cellranger3.1.0
-  
+terminated: {}

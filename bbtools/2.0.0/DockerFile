@@ -1,9 +1,0 @@
-FROM bicf/java12:2.0.0
-LABEL author="Jon Gesell"
-
-RUN wget https://downloads.sourceforge.net/project/bbmap/BBMap_38.67.tar.gz && \
-  tar -xvzf BBMap_38.67.tar.gz && \
-  rm BBMap_38.67.tar.gz
-ENV PATH=/bbmap/:${PATH}
-
-ENTRYPOINT []

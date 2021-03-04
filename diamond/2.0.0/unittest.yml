@@ -1,4 +1,0 @@
-commands:
-  - cmd: '--version'
-    expect_text: |
-      diamond version 0.9.36

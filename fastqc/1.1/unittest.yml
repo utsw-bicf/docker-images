@@ -1,4 +1,0 @@
-commands:
-  - cmd: 'fastqc --version'
-    expect_text: |
-      FastQC v0.11.8

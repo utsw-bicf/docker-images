@@ -1,8 +1,0 @@
-FROM bicf/python3:2.0.0
-
-LABEL author="Jon Gesell"
-
-RUN conda install -c bioconda diamond && \
-  conda update diamond
-
-ENTRYPOINT ["diamond"]
