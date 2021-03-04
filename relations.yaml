@@ -7,6 +7,12 @@ images:
         - cellranger3.1.0:2.0.0
       parents:
         - bicfbase:2.0.0
+  bbtools:
+    2.0.0:
+      children:
+        - null
+      parents:
+        bicfbase:2.0.0
   bicfbase:
     1.1:
       children:
@@ -15,6 +21,7 @@ images:
         - ubuntu:18.04
     2.0.0:
       children:
+        - bbtools:2.0.0
         - bcl2fastq2.17:2.0.0
         - fastqc:2.0.0
         - java12:2.0.0
@@ -83,7 +90,7 @@ images:
   java12:
     2.0.0:
       children:
-        - null
+        - bbtools:2.0.0
       parents:
         - bicfbase:2.0.0
     2.0.1:
@@ -128,9 +135,13 @@ images:
   ubuntu:
     "18.04":
       children:
+        - bicfbase:1.1
+        - bicfbase:2.0.0
+        - bicfbase:2.0.1
         - bicfbase:2.0.2
       parents: []
 latest:
+  bbtools: 2.0.0
   bcl2fastq2.17: 2.0.0
   bicfbase: 2.0.2
   cellranger2.1.1: 2.0.0
@@ -145,8 +156,8 @@ latest:
   python3: 2.0.1
   python3.7: 2.0.2
   samtools1.9: 2.0.0
-  ubuntu: "18.04"
 terminated:
   - cellranger2.1.1
   - cellranger3.0.2
   - cellranger3.1.0
+  
