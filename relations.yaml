@@ -134,9 +134,15 @@ images:
   perl:
     2.0.0:
       children:
-        - null
+        - perlcheckdesign:2.0.0
       parents:
         bicfbase:2.0.0
+  perlcheckdesign:
+    2.0.0:
+      children:
+        - null
+      parents:
+        - perl:2.0.0
   python3:
     2.0.0:
       children:
@@ -190,6 +196,7 @@ latest:
   multiqc: 2.0.0
   nextflow20: 2.0.1
   perl: 2.0.0
+  perlcheckdesign: 2.0.0
   python3: 2.0.1
   python3.7: 2.0.2
   samtools1.9: 2.0.0
