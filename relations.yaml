@@ -27,6 +27,7 @@ images:
         - fastqc:2.0.0
         - java12:2.0.0
         - metagenemark:2.0.0
+        - perl:2.0.0
         - python3:2.0.0
       parents:
         - ubuntu:18.04
@@ -130,6 +131,12 @@ images:
         - compute:2.0.0
       parents:
         - java12:2.0.1
+  perl:
+    2.0.0:
+      children:
+        - null
+      parents:
+        bicfbase:2.0.0
   python3:
     2.0.0:
       children:
@@ -179,7 +186,10 @@ latest:
   fastqc: 2.0.0
   hisat2.2.1: 2.0.0
   java12: 2.0.1
+  megan6: 2.0.0
+  multiqc: 2.0.0
   nextflow20: 2.0.1
+  perl: 2.0.0
   python3: 2.0.1
   python3.7: 2.0.2
   samtools1.9: 2.0.0
