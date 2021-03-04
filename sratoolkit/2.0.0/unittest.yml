@@ -1,0 +1,4 @@
+commands:
+  - cmd: "srapath --version | head -n2 | tail -n1"
+    expect_text: |
+      srapath : 2.9.6
