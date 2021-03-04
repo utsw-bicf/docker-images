@@ -1,0 +1,18 @@
+FROM bicf/bicfbase:2.0.0
+LABEL author="Jon Gesell"
+#NOTE: This must be built using the --no-cache flag, otherwise the license will not update properly!
+
+#Download the Executable.  Note: This link will have to be recreated each time as it expires!  Also expires every 400 days
+WORKDIR /MetaGeneMark3
+RUN wget http://topaz.gatech.edu/GeneMark/tmp/GMtool_4fhRO/MetaGeneMark_linux_64.tar.gz && \
+  tar -xvf MetaGeneMark_linux_64.tar.gz -I pigz && \
+  rm MetaGeneMark_linux_64.tar.gz
+
+#Download the Key.  Note: This link will have to be recreated each time as it expires!
+RUN wget http://topaz.gatech.edu/GeneMark/tmp/GMtool_4fhRO/gm_key_64.gz && \
+  gunzip gm_key_64.gz
+WORKDIR /
+
+ENV PATH="/MetaGeneMark3/MetaGeneMark_linux_64/mgm/:$PATH"
+
+ENTRYPOINT [] 
