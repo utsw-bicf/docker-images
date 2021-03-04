@@ -12,7 +12,7 @@ images:
       children:
         - null
       parents:
-        bicfbase:2.0.0
+        - bicfbase:2.0.0
   bicfbase:
     1.1:
       children:
@@ -91,6 +91,7 @@ images:
     2.0.0:
       children:
         - bbtools:2.0.0
+        - megan6:2.0.0
       parents:
         - bicfbase:2.0.0
     2.0.1:
@@ -98,6 +99,12 @@ images:
         - nextflow20:2.0.1
       parents:
         - bicfbase:2.0.1
+  megan6:
+    2.0.0:
+      children:
+        - null
+      parents:
+        - java12:2.0.0
   nextflow20:
     2.0.1:
       children:
@@ -160,4 +167,3 @@ terminated:
   - cellranger2.1.1
   - cellranger3.0.2
   - cellranger3.1.0
-  

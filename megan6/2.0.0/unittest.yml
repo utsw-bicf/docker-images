@@ -1,0 +1,3 @@
+commands:
+  - cmd: '-c "nextflow -v"'
+    expect_text: "nextflow version 20.07.1.5412"
