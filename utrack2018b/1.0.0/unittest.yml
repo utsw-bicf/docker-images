@@ -1,0 +1,4 @@
+commands:
+  - cmd: 'docker run bicf/utrack2018b:1.0.0 /bin/sh /execute/utrack/run_utrack.sh /opt/mcr/v95 1>temp.txt & sleep 100 && kill -9 $! && cat temp.txt && rm temp.txt'
+    expect_text: |
+      *LD_LIBRARY_PATH is .:/opt/mcr/v95/runtime/glnxa64:/opt/mcr/v95/bin/glnxa64:/opt/mcr/v95/sys/os/glnxa64:/opt/mcr/v95/sys/opengl/lib/glnxa64
