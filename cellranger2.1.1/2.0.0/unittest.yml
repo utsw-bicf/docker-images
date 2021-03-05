@@ -1,6 +1,4 @@
 commands:
-  - cmd: 'testrun --version | head -n3'
+  - cmd: 'testrun --version | head -n2 | tail -n1'
     expect_text: |
-      /opt/cellranger-2.1.1/cellranger-cs/2.1.1/bin
       cellranger testrun (2.1.1)
-      Copyright (c) 2017 10x Genomics, Inc.  All rights reserved.
