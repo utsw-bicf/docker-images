@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/r,perl,linux,macos,python,windows,microsoftoffice
 # Edit at https://www.gitignore.io/?templates=r,perl,linux,macos,python,windows,microsoftoffice
 
@@ -278,7 +277,5 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/r,perl,linux,macos,python,windows,microsoftoffice
 
-.vscode/settings.json
-temp.py
-temp.txt
-temp-BICF-JG-LE4350.txt
+master_relation.yml
+*.pyc

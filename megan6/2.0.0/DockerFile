@@ -1,0 +1,11 @@
+FROM bicf/java12:2.0.0
+LABEL author="Jon Gesell"
+
+RUN wget https://software-ab.informatik.uni-tuebingen.de/download/megan6/MEGAN_Community_unix_6_18_2.sh && \
+  perl -E 'say join "\n", "", 1, "", "1,2,3", "", "", "", 38000, n, ""' > /tmp/megan_install_v6 && \
+  bash MEGAN_Community_unix_6_18_2.sh < /tmp/megan_install_v6 && \
+  rm MEGAN_Community_unix_6_18_2.sh /tmp/megan_install_v6;
+
+ENV PATH="/usr/local/megan:/usr/local/megan/tools:${PATH}"
+
+ENTRYPOINT []

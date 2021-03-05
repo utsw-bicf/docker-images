@@ -1,0 +1,6 @@
+commands:
+  - cmd: '--version 2>&1'
+    expect_text: |
+      BCL to FASTQ file converter
+      bcl2fastq v2.17.1.14
+      Copyright (c) 2007-2015 Illumina, Inc.

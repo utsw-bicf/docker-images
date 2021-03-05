@@ -1,0 +1,4 @@
+commands:
+  - cmd: "gmhmmp | head -n2 | tail -n1"
+    expect_text: |
+      GeneMark.hmm version 3.38

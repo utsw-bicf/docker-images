@@ -1,0 +1,10 @@
+FROM bicf/bicfbase:2.0.0
+LABEL author="Jon Gesell"
+
+RUN wget "http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.9.6-1/sratoolkit.2.9.6-1-centos_linux64.tar.gz" && \
+  tar -xvzf sratoolkit.2.9.6-1-centos_linux64.tar.gz && \
+  rm sratoolkit.2.9.6-1-centos_linux64.tar.gz
+
+ENV PATH=/sratoolkit.2.9.6-1-centos_linux64/bin:${PATH}
+
+ENTRYPOINT []

@@ -1,0 +1,13 @@
+FROM bicf/bcl2fastq2.17:2.0.0
+LABEL author="Jon Gesell"
+LABEL author="Gervaise H. Henry"
+
+#Install the CellRanger version
+#NOTE: This link expires every 10 minutes, needs to be refreshed every time.
+RUN wget -O cellranger-3.1.0.tar.gz "http://cf.10xgenomics.com/releases/cell-exp/cellranger-3.1.0.tar.gz?Expires=1587025145&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cDovL2NmLjEweGdlbm9taWNzLmNvbS9yZWxlYXNlcy9jZWxsLWV4cC9jZWxscmFuZ2VyLTMuMS4wLnRhci5neiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTU4NzAyNTE0NX19fV19&Signature=CAdVosoOTsLV7kMBZUjlQldCSgGrTobTMSugJz7bJZN4MQndl~6BBtAEkc4zYIhESoFRwCjqlejO1WrCV892tVy81Jq6DMejfw5pDppyTM4oMgCubnww9iU6BB2gp7yw3LirkFSgnDwW3Aj4TVRH4F7XBtOV5TGfl-8dX2nLXEjTuO6qx-hTxQfYUj-usN20oKHHuJkV8DRHp9YcNhID-8-YMBERaVi414sM5qY5Acm0Q1WwuK-oT1LVHiIHZcHylUru-VmaJF8h1is5HCOSkQ~iWZ174xOdZoUgl0bHpAaeq9oJwtXnWDlJ5VL7hGK59WzfPN8fSz3cTLMAqpcFQw__&Key-Pair-Id=APKAI7S6A5RYOXBWRPDA" && \
+  tar -xzvf cellranger-3.1.0.tar.gz --directory /opt && \
+  rm cellranger*.tar.gz;
+
+ENV PATH="$PATH:/opt/cellranger-3.1.0"
+
+ENTRYPOINT ["cellranger"]

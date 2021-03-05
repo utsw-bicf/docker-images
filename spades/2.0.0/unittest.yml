@@ -1,0 +1,4 @@
+commands:
+  - cmd: "spades.py --version"
+    expect_text: |
+      SPAdes v3.13.2

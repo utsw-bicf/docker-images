@@ -1,0 +1,3 @@
+commands:
+  - cmd: "daa-meganizer -h 2>&1 | tail -n3 | head -n1"
+    expect_text: "        MEGAN Community Edition (version 6.18.2, built 11 Dec 2019)."

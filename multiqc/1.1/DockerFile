@@ -1,0 +1,37 @@
+FROM bicf/bicfbase:1.1
+LABEL author="Jon Gesell"
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+RUN apt-get install -y git curl make python3-pip python3-matplotlib texlive-xetex
+
+RUN wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh
+RUN bash Miniconda-latest-Linux-x86_64.sh -p /miniconda -b
+RUN rm Miniconda-latest-Linux-x86_64.sh
+
+ENV PATH=/miniconda/bin:${PATH}
+
+RUN wget https://github.com/jgm/pandoc/releases/download/2.4/pandoc-2.4-1-amd64.deb
+
+RUN pip3 install --upgrade pip
+RUN pip3 install multiqc
+
+RUN conda update -y conda
+RUN wget https://sourceforge.net/projects/libpng/files/zlib/1.2.9/zlib-1.2.9.tar.gz
+RUN tar -xvf zlib-1.2.9.tar.gz
+WORKDIR /zlib-1.2.9
+RUN ./configure
+RUN make
+RUN make install
+RUN ln -s -f /usr/local/lib/libz.so.1.2.9/lib libz.so.1
+RUN cd ~
+RUN rm -rf zlib-1.2.9.tar.gzi
+WORKDIR /
+
+RUN conda install libgfortran==1
+RUN conda install pandoc
+
+VOLUME /var/tmp/results
+VOLUME /var/tmp/data

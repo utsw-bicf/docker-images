@@ -1,0 +1,8 @@
+FROM bicf/bicfbase:2.0.0
+LABEL author="Jon Gesell"
+
+RUN apt-get install -y perl
+
+RUN cpan App::cpanminus
+
+ENTRYPOINT ["perl"]

@@ -1,0 +1,11 @@
+FROM bicf/bicfbase:1.1
+LABEL author="Jon Gesell"
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN wget "http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-centos_linux64.tar.gz"
+RUN tar -xvzf sratoolkit.current-centos_linux64.tar.gz && rm sratoolkit.current-centos_linux64.tar.gz
+ENV PATH=/sratoolkit.2.9.6-1-centos_linux64/bin:${PATH}
+
+VOLUME /var/tmp/results
+VOLUME /var/tmp/data
