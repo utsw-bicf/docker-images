@@ -1,5 +1,4 @@
 commands:
-  - cmd: 'bbversion.sh'
+  - cmd: "bbversion.sh | head -n1"
     expect_text: |
       38.67
-      Even More Consensus Building
