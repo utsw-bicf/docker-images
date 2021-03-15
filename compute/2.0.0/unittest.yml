@@ -1,0 +1,17 @@
+commands:
+  - cmd: '-c "perl --version | head -n 2 | tail -n 1 | cut -f1 -d \"(\""'
+    expect_text: "This is perl 5, version 30, subversion 3 "
+  - cmd: '-c "srapath --version"'
+    expect_text: "\nsrapath : 2.9.6"
+  - cmd: '-c "fastqc --version"'
+    expect_text: "FastQC v0.11.9"
+  - cmd: '-c "multiqc --version"'
+    expect_text: "multiqc, version 1.9"
+  - cmd: '-c "az --version | head -n 4"'
+    expect_text: |
+      azure-cli                         2.11.1
+
+      core                              2.11.1
+      telemetry                          1.0.6
+  - cmd: '-c "ls -l /opt/azureblobworker.sh"'
+    expect_text: "-rwxr-xr-x 1 root root.*/opt/azureblobworker.sh"

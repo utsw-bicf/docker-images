@@ -1,0 +1,4 @@
+FROM bicf/perl:2.0.0
+LABEL author="Jon Gesell"
+
+RUN cpanm List::MoreUtils Switch Getopt::Long

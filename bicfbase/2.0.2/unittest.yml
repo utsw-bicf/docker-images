@@ -1,0 +1,13 @@
+commands:
+  - cmd: "parallel --version | head -n1"
+    expect_text: |
+      GNU parallel 20161222
+  - cmd: "pandoc --version | head -n1"
+    expect_text: |
+      pandoc 1.19.2.4
+  - cmd: "git --version"
+    expect_text: |
+      git version 2.17.1
+  - cmd: "lbzip2 --version | head -n1"
+    expect_text: |
+      lbzip2 version 2.5

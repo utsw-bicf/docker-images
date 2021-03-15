@@ -1,0 +1,3 @@
+commands:
+  - cmd: '--version | head -n2 | tail -n1 | cut -f2 -d "(" | cut -f1 -d ")"'
+    expect_text: "v5.26.1"
