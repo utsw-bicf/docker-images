@@ -1,4 +1,4 @@
 commands:
   - cmd: 'multiqc --version'
     expect_text: |
-      multiqc, version 1.9
+      multiqc, version 1.8
