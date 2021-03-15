@@ -1,4 +1,3 @@
 commands:
-  - cmd: '--version | head -n2 | tail -n1'
-    expect_text: |
-      This is perl 5, version 26, subversion 1 (v5.26.1) built for x86_64-linux-gnu-thread-multi
+  - cmd: '--version | head -n2 | tail -n1 | cut -f2 -d "(" | cut -f1 -d ")"'
+    expect_text: "v5.26.1"
