@@ -279,3 +279,4 @@ $RECYCLE.BIN/
 
 master_relation.yml
 *.pyc
+.vscode/settings.json
