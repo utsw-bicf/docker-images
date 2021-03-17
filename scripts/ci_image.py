@@ -42,7 +42,7 @@ def get_test_list(filename):
     """
     with open(filename) as infile:
         testinfo_list = []
-        unittest_config = yaml.load(infile)
+        unittest_config = yaml.safe_load(infile)
         for testinfo in unittest_config['commands']:
             cmd = testinfo['cmd']
             expect_text = testinfo['expect_text']
@@ -109,7 +109,7 @@ def get_test_file_path(file_path):
     :return: str: a path to a unittest.yml file to test or None if there is no associated test file
     """
     filename = os.path.basename(file_path)
-    if filename in ["Dockerfile", UNITTEST_FILENAME]:
+    if filename in ["Dockerfile", UNITTEST_FILENAME] or filename in ["Test_Dockerfile", UNITTEST_FILENAME]:
         parent_directory = os.path.dirname(file_path)
         unittest_filepath = "{}/{}".format(parent_directory, UNITTEST_FILENAME)
         if os.path.exists(unittest_filepath):
@@ -153,15 +153,18 @@ def find_and_run_tests(owner, changed_paths):
                 had_errors = True
         else:
             print("Skipping {}".format(unittest_path))
-    print("Tested {} images. Images with errors: {}".format(
-        tested_images, images_with_errors))
+    if tested_images == 0:
+        print("ERROR: No images tested, unit test may not have been found correctly.")
+        had_errors = True
+    else:
+        print("Tested {} images. Images with errors: {}".format(tested_images, images_with_errors))
     return had_errors
 
 
 def main():
     if len(sys.argv) < 2:
         print(
-            "Usage python3 tests/imagecheck.py <docker_owner> [<unittest_or_dockerfile_path>...]")
+            "Usage python3 tests/ci_image.py <docker_owner> [<unittest_or_dockerfile_path>...]")
         sys.exit(1)
     else:
         owner = sys.argv[1]

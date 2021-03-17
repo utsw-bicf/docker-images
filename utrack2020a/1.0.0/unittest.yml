@@ -2,3 +2,5 @@ commands:
   - cmd: "find /execute/utrack/run_utrack.sh"
     expect_text: |
       /execute/utrack/run_utrack.sh
+  - cmd: 'bash /execute/utrack/run_utrack.sh /opt/mcr/v98 1>temp.txt & sleep 100 && kill -9 $! && cat temp.txt && rm temp.txt'
+    expect_text: "*LD_LIBRARY_PATH is .:/opt/mcr/v95/runtime/glnxa64:/opt/mcr/v95/bin/glnxa64:/opt/mcr/v95/sys/os/glnxa64:/opt/mcr/v95/sys/opengl/lib/glnxa64"

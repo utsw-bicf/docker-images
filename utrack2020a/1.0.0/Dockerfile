@@ -1,10 +1,10 @@
 FROM bicf/bicfbase:2.0.2
 
 RUN apt-get update; \
-    apt-get install unzip xorg curl x11-apps libgl1-mesa-glx libxt6; \
+    apt-get install -y unzip xorg curl x11-apps libxt6; \
     mkdir -p /execute; \
-    (mkdir -p /opt/mcr; \
-    mkdir -p /mcr-install; \
+    (mkdir -p /opt/mcr && \
+    mkdir -p /mcr-install && \
     wget https://ssd.mathworks.com/supportfiles/downloads/R2020a/Release/6/deployment_files/installer/complete/glnxa64/MATLAB_Runtime_R2020a_Update_6_glnxa64.zip -P /mcr-install; \
     unzip -q /mcr-install/MATLAB_Runtime_R2020a_Update_6_glnxa64.zip -d /mcr-install; \
     ./mcr-install/install -destinationFolder /opt/mcr -agreeToLicense yes -mode silent; \

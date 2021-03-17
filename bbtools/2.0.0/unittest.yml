@@ -1,0 +1,4 @@
+commands:
+  - cmd: "bbversion.sh | head -n1"
+    expect_text: |
+      38.67

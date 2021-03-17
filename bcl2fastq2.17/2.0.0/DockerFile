@@ -1,0 +1,12 @@
+FROM bicf/bicfbase:2.0.0
+LABEL author="Jon Gesell"
+
+#Install prerequisites
+RUN apt-get install -y alien
+
+#Install BCL2FastQ2
+RUN wget http://support.illumina.com/content/dam/illumina-support/documents/downloads/software/bcl2fastq/bcl2fastq2-v2.17.1.14-Linux-x86_64.rpm && \
+  alien -i bcl2fastq*.rpm && \ 
+  rm -rf bcl2fastq2-v2.17.1.14-Linux-x86_64.rpm
+
+ENTRYPOINT ["bcl2fastq"]

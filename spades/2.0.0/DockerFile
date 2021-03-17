@@ -1,0 +1,14 @@
+FROM bicf/python3:2.0.0
+LABEL author="Jon Gesell"
+
+RUN apt-get install -y zlib1g-dev cmake libbz2-dev
+
+RUN pip install regex
+
+RUN wget http://cab.spbu.ru/files/release3.13.2/SPAdes-3.13.2-Linux.tar.gz && \
+    tar -xzf SPAdes-3.13.2-Linux.tar.gz && \
+    rm SPAdes-3.13.2-Linux.tar.gz
+
+ENV PATH=/SPAdes-3.13.2-Linux/bin/:${PATH}
+
+ENTRYPOINT []
