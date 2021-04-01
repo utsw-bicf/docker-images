@@ -1,0 +1,4 @@
+commands:
+  - cmd: "head -n4 VersionInfo.xml | tail -n1"
+    expect_text: |
+      <version>9.8.0.1538580</version>
