@@ -3,4 +3,4 @@ commands:
     expect_text: "  <version>9.8.0.1538580</version>"
   - cmd: "du -sh /opt/mcr/v98"
     expect_text: |
-      6.1G    /opt/mcr/v98
+      6.1G	/opt/mcr/v98
