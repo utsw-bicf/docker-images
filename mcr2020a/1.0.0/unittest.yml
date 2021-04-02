@@ -1721,4 +1721,4 @@ commands:
       /opt/mcr/v98/toolbox/compiler/mdwas/setup/scripts/glnxa64/create_user.sh
       /opt/mcr/v98/toolbox/compiler/mdwas/setup/scripts/glnxa64/uninstall.sh
       /opt/mcr/v98/toolbox/compiler/mdwas/setup/scripts/glnxa64/install.sh
-      /opt/mcr/v98/toolbox/parallel/bigdata/bin/launchworkermanager.sh"
+      /opt/mcr/v98/toolbox/parallel/bigdata/bin/launchworkermanager.sh
