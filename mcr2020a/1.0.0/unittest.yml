@@ -1,0 +1,6 @@
+commands:
+  - cmd: "head -n4 /opt/mcr/v98/VersionInfo.xml | tail -n1"
+    expect_text: "  <version>9.8.0.1538580</version>"
+  - cmd: "du -sh /opt/mcr/v98"
+    expect_text: |
+      6.1G	/opt/mcr/v98
