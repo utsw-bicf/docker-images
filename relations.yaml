@@ -126,7 +126,7 @@ images:
       children:
         - null
       parents:
-        python3:2.0.0
+        - python3:2.0.0
   nextflow20:
     2.0.1:
       children:
@@ -138,7 +138,7 @@ images:
       children:
         - perlcheckdesign:2.0.0
       parents:
-        bicfbase:2.0.0
+        - bicfbase:2.0.0
   perlcheckdesign:
     2.0.0:
       children:
@@ -186,12 +186,12 @@ images:
       children:
         - null
       parents:
-        bicfbase:1.1
+        - bicfbase:1.1
     2.0.0:
       children:
         - null
       parents:
-        bicfbase:2.0.0
+        - bicfbase:2.0.0
   ubuntu:
     "18.04":
       children:
