@@ -108,7 +108,7 @@ images:
   mcr2020a:
     1.0.0:
       children:
-      - null
+      - utrack3d1.0:1.0.0
       parents:
       - bicfbase:2.0.2
   megan6:
@@ -207,6 +207,12 @@ images:
       - bicfbase:2.0.1
       - bicfbase:2.0.2
       parents: []
+  utrack3d1.0:
+    1.0.0:
+      children:
+      - null
+      parents:
+      - mcr2020a:1.0.0
 latest:
   bbtools: 2.0.0
   bcl2fastq2.17: 2.0.0
@@ -230,6 +236,7 @@ latest:
   samtools1.9: 2.0.0
   spades: 2.0.0
   sratoolkit: 2.0.0
+  utrack3d1.0: 1.0.0
 terminated:
 - cellranger2.1.1
 - cellranger3.0.2
