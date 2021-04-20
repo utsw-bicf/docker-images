@@ -1,0 +1,4 @@
+commands:
+  - cmd: '/bin/sh /execute/utrack3d/run_utrack3D.sh /opt/mcr/v98 1>temp.txt & sleep 100 && kill -9 $! && tail -n1 temp.txt && rm temp.txt'
+    expect_text: |
+      LD_LIBRARY_PATH is .:/opt/mcr/v98/runtime/glnxa64:/opt/mcr/v98/bin/glnxa64:/opt/mcr/v98/sys/os/glnxa64:/opt/mcr/v98/sys/opengl/lib/glnxa64
