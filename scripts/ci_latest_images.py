@@ -42,13 +42,14 @@ def main():
             "Usage python3 scripts/ci_latest_images.py <docker_owner> <relations.yaml path>")
         sys.exit(1)
     else:
-        functions.docker_login()
         owner = sys.argv[1]
         relations = load_yaml(os.path.abspath(sys.argv[2]))
         latest_images = relations['latest']
         for image in latest_images:
             tag = latest_images[image]
             image_name = "{}/{}:{}".format(owner, image, tag).replace("+", "_")
+            if not str(os.environ.get('DOCKERHUB_URL')).lower() == "none" or str(os.environ.get('DOCKERHUB_URL')).lower() == 'null' or os.environ.get('DOCKERHUB_URL') == None:
+                image_name = "{}/{}".format(os.environ.get('DOCKERHUB_URL'), image_name)
             pull_image(image_name)
             test_path = "{}/{}/unittest.yml".format(image, tag)
             test_command = "python3 scripts/ci_image.py \"{}\" {}".format(
