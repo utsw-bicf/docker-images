@@ -77,7 +77,6 @@ jobs:
           DOCKERHUB_UN: ${{secrets.DOCKERHUB_UN}}
           DOCKERHUB_URL: ${{secrets.DOCKERHUB_URL}}
         run: |
-          echo ${DOCKERHUB_URL}
           python3 scripts/functions.py 'login'
 
       - name: Update relations.yaml
