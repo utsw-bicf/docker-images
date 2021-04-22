@@ -128,7 +128,7 @@ def build_docker_cmd(command, owner, tool, version):
     # Ensure the command is lower-case
     command = command.lower()
     # Check to see if URL is needed
-    if not str(os.environ.get('DOCKERHUB_URL')).lower() == "none" or str(os.environ.get('DOCKERHUB_URL')).lower() == 'null' or os.environ.get('DOCKERHUB_URL') == None:
+    if not (str(os.environ.get('DOCKERHUB_URL')).lower() == "none" or str(os.environ.get('DOCKERHUB_URL')).lower() == 'null' or os.environ.get('DOCKERHUB_URL') == None):
         owner = "{}/{}".format(os.environ.get('DOCKERHUB_URL'), owner)
     # Generate local build command
     if (command == "build"):
