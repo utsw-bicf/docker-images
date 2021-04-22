@@ -48,7 +48,7 @@ def main():
         for image in latest_images:
             tag = latest_images[image]
             image_name = "{}/{}:{}".format(owner, image, tag).replace("+", "_")
-            if 'DOCKERHUB_URL' in os.environ and not (str(os.environ.get('DOCKERHUB_URL')).lower() == "none" or str(os.environ.get('DOCKERHUB_URL')).lower() == 'null' or os.environ.get('DOCKERHUB_URL') == None):
+            if not (str(os.environ.get('DOCKERHUB_URL')).lower() == "none" or str(os.environ.get('DOCKERHUB_URL')).lower() == 'null' or os.environ.get('DOCKERHUB_URL') == None or os.environ.get('DOCKERHUB_URL') == ''):
                 image_name = "{}/{}".format(os.environ.get('DOCKERHUB_URL'), image_name)
             pull_image(image_name)
             test_path = "{}/{}/unittest.yml".format(image, tag)
